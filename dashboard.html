@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HELIOS System</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-seedling"></i>
+                <div class="logo-text"><h2>HELIOS System</h2><p>IoT Magnetic Stimulation</p></div>
+            </div>
+            <div class="nav-menu">
+                <div class="nav-item active" onclick="switchPage('home')"><i class="fas fa-home"></i><span>Home</span></div>
+                <div class="nav-item" onclick="switchPage('dashboard')"><i class="fas fa-chart-line"></i><span>Dashboard</span></div>
+                <div class="nav-item" onclick="switchPage('history')"><i class="fas fa-database"></i><span>Data Historis</span></div>
+            </div>
+            <div class="sidebar-footer"><p>© 2025 HELIOS Project</p><p>Tugas Akhir Teknik Elektro</p></div>
+        </div>
+
+        <div class="main-content">
+            
+            <div id="home" class="page active"></div>
+
+            <div id="dashboard" class="page">
+                <div class="header">
+                    <h1><i class="fas fa-chart-line"></i> Dashboard Kontrol</h1>
+                    <div class="status-badge"><div class="status-dot"></div><span>Operasional</span></div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="card control-panel">
+                        <div class="card-header">
+                            <div class="card-title"><i class="fas fa-sliders-h"></i> Panel Kontrol</div>
+                        </div>
+                        <div class="control-group">
+                            <label>Durasi Paparan</label>
+                            <div class="control-row">
+                                <input type="range" min="1" max="120" value="30" class="slider" id="durationSlider" oninput="updateDuration(this.value)">
+                                <span id="durationValue">30 m</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label>Set Target Medan (µT)</label>
+                            <select class="form-select" id="pwmSelect" onchange="updatePWM(this.value)">
+                                <option value="100">100 µT (Low)</option>
+                                <option value="200">200 µT (Medium)</option>
+                                <option value="300">300 µT (High)</option>
+                            </select>
+                        </div>
+                        <div class="timer-box">
+                            <div class="timer-display" id="timer">00:00:00</div>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="startExperiment()"><i class="fas fa-play"></i> Mulai</button>
+                            <button class="btn btn-stop" onclick="stopExperiment()"><i class="fas fa-stop"></i> Stop & Simpan</button>
+                        </div>
+                    </div>
+
+                    <div class="widget-card">
+                        <div class="widget-body">
+                            <div class="widget-icon icon-blue"><i class="fas fa-bolt"></i></div>
+                            <div class="widget-details"><span class="label">ARUS LISTRIK</span><div class="value-box text-blue"><span id="monitorCurrent">0.33</span> <small>A</small></div></div>
+                        </div>
+                        <div class="progress-bg"><div class="progress-fill fill-blue" id="currentBar" style="width:33%"></div></div>
+                    </div>
+                    
+                    <div class="widget-card">
+                        <div class="widget-body">
+                            <div class="widget-icon icon-orange"><i class="fas fa-plug"></i></div>
+                            <div class="widget-details"><span class="label">TEGANGAN</span><div class="value-box text-orange"><span id="monitorVoltage">1.36</span> <small>V</small></div></div>
+                        </div>
+                        <div class="progress-bg"><div class="progress-fill fill-orange" id="voltageBar" style="width:20%"></div></div>
+                    </div>
+                    
+                    <div class="widget-card">
+                        <div class="widget-body">
+                            <div class="widget-icon icon-purple"><i class="fas fa-clock"></i></div>
+                            <div class="widget-details"><span class="label">DURASI AKTIF</span><div class="value-box text-purple"><span id="monitorDuration">0</span> <small>Min</small></div></div>
+                        </div>
+                        <div class="progress-bg"><div class="progress-fill fill-purple" id="durationBar" style="width:0%"></div></div>
+                    </div>
+                    
+                    <div class="widget-card">
+                        <div class="widget-body">
+                            <div class="widget-icon icon-red"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="widget-details"><span class="label">DAYA (POWER)</span><div class="value-box text-red"><span id="monitorPower">0.45</span> <small>W</small></div></div>
+                        </div>
+                        <div class="progress-bg"><div class="progress-fill fill-red" style="width:100%"></div></div>
+                    </div>
+                    
+                    <div class="widget-card">
+                        <div class="widget-body">
+                            <div class="widget-icon icon-pink"><i class="fas fa-magnet"></i></div>
+                            <div class="widget-details"><span class="label">MEDAN MAGNET</span><div class="value-box text-pink"><span id="monitorField">100</span> <small>µT</small></div></div>
+                        </div>
+                        <div class="progress-bg"><div class="progress-fill fill-pink" style="width:100%"></div></div>
+                    </div>
+                    
+                    <div class="widget-card">
+                        <div class="widget-body">
+                            <div class="widget-icon icon-green"><i class="fas fa-money-bill-wave"></i></div>
+                            <div class="widget-details"><span class="label">ESTIMASI BIAYA</span><div class="value-box text-green"><span id="monitorCost">0.00</span> <small>Rp</small></div></div>
+                        </div>
+                        <div class="progress-bg"><div class="progress-fill fill-green" id="costBar" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="history" class="page">
+                <div class="header">
+                    <h1><i class="fas fa-database"></i> Laporan Data Historis</h1>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-sm" onclick="clearHistory()" style="background:#ff7675; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;"><i class="fas fa-trash"></i> Reset</button>
+                        <button class="btn btn-pdf" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+                    </div>
+                </div>
+                
+                <div class="history-layout" id="reportArea">
+                    <div class="card table-card full-height">
+                        <div class="card-header">
+                            <div class="card-title"><i class="fas fa-list-ul"></i> Log Data Lengkap</div>
+                        </div>
+                        <div class="table-scroll-wrapper">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;">No</th>
+                                        <th>Tanggal</th>
+                                        <th>Waktu</th>
+                                        <th>Target</th>
+                                        <th>Arus</th>
+                                        <th>Tegangan</th>
+                                        <th>Daya</th>
+                                        <th>Biaya (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="historyBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

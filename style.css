@@ -1,0 +1,353 @@
+/* =========================================
+   1. GLOBAL & RESET (DARK MODE)
+   ========================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body { 
+    /* Background Gelap Pekat (Deep Space Blue) */
+    background: #0f172a; 
+    color: #e2e8f0; 
+    overflow: hidden; 
+    height: 100vh; 
+}
+
+.container { display: flex; height: 100vh; }
+
+/* =========================================
+   2. SIDEBAR (DARK GLASS)
+   ========================================= */
+.sidebar { 
+    width: 250px; 
+    /* Background Gelap Transparan */
+    background: rgba(30, 41, 59, 0.95); 
+    display: flex; flex-direction: column; 
+    box-shadow: 4px 0 30px rgba(0, 0, 0, 0.5);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 10; position: relative; overflow: hidden;
+}
+
+/* EFEK KILATAN BERWARNA (HOLOGRAPHIC SHEEN) */
+.sidebar::after, 
+.widget-card::after, 
+.control-panel::after, 
+.table-card::after,
+#home::after {
+    content: ""; 
+    position: absolute; 
+    top: 0; left: -150%; 
+    width: 100%; height: 100%;
+    /* Gradasi Kilatan Warna-Warni (Cyan - Ungu - Pink) */
+    background: linear-gradient(
+        120deg, 
+        transparent 20%, 
+        rgba(6, 182, 212, 0.4) 40%,  /* Cyan */
+        rgba(168, 85, 247, 0.4) 50%, /* Ungu */
+        rgba(236, 72, 153, 0.4) 60%, /* Pink */
+        transparent 80%
+    );
+    transform: skewX(-25deg); 
+    z-index: 10; 
+    pointer-events: none;
+    /* Animasi Loop */
+    animation: holoSheen 4s infinite linear; 
+}
+
+.logo { 
+    padding: 30px 20px; display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1); z-index: 11;
+}
+.logo i { font-size: 28px; color: #00e5ff; text-shadow: 0 0 10px rgba(0, 229, 255, 0.6); animation: pulse 2s infinite; }
+.logo-text h2 { font-size: 16px; color: #fff; font-weight: 800; letter-spacing: 1px; }
+.logo-text p { font-size: 11px; color: #94a3b8; }
+
+.nav-menu { flex: 1; padding: 20px; z-index: 11; }
+.nav-item { 
+    padding: 12px 15px; margin-bottom: 8px; border-radius: 10px; 
+    cursor: pointer; display: flex; align-items: center; gap: 12px; 
+    color: #94a3b8; font-weight: 600; transition: 0.3s; 
+    border: 1px solid transparent;
+}
+.nav-item i { width: 20px; transition: 0.3s; }
+
+/* Hover Menu: Glow effect */
+.nav-item:hover { 
+    background: rgba(255, 255, 255, 0.05); 
+    color: #fff; 
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
+    transform: translateX(5px); 
+}
+.nav-item:hover i { color: #00e5ff; }
+
+.nav-item.active { 
+    background: linear-gradient(90deg, #00e5ff, #2979ff); 
+    color: #000; /* Teks hitam biar kontras di bg terang */
+    font-weight: 800;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+}
+.nav-item.active i { color: #000; }
+
+.sidebar-footer { padding: 20px; font-size: 11px; color: #64748b; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); z-index: 11; }
+
+/* =========================================
+   3. MAIN CONTENT
+   ========================================= */
+.main-content { flex: 1; padding: 25px; overflow: hidden; position: relative; }
+.page { display: none !important; height: 100%; width: 100%; overflow-y: auto; }
+.page.active { display: block !important; animation: fadeIn 0.5s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Padding Halaman */
+#dashboard, #history { padding: 25px; }
+
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.header h1 { font-size: 24px; font-weight: 800; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.1); }
+
+.status-badge { 
+    background: rgba(16, 185, 129, 0.1); 
+    padding: 8px 20px; border-radius: 30px; 
+    display: flex; align-items: center; gap: 10px; 
+    font-size: 13px; font-weight: 700; color: #34d399; 
+    border: 1px solid #34d399; 
+    box-shadow: 0 0 10px rgba(52, 211, 153, 0.2);
+}
+.status-dot { width: 8px; height: 8px; background: #34d399; border-radius: 50%; animation: pulse 1s infinite; box-shadow: 0 0 10px #34d399; }
+
+/* =========================================
+   4. DASHBOARD GRID
+   ========================================= */
+.dashboard-grid { 
+    display: grid; 
+    grid-template-columns: 280px 1fr 1fr 1fr; 
+    grid-template-rows: 1fr 1fr; 
+    gap: 20px; 
+}
+
+/* =========================================
+   5. WIDGET CARDS (DARK THEME)
+   ========================================= */
+/* Style Dasar Kartu Gelap */
+.widget-card, .control-panel, .table-card, .chart-card {
+    background: #1e293b; /* Slate 800 */
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative; 
+    z-index: 5;
+    overflow: hidden; 
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+
+.widget-card:hover, .control-panel:hover { 
+    transform: translateY(-5px); 
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); 
+}
+
+.widget-card { display: flex; flex-direction: column; justify-content: space-between; }
+.widget-body { display: flex; align-items: center; gap: 15px; flex: 1; position: relative; z-index: 11; }
+
+/* Icon Bulat Neon */
+.widget-icon { 
+    width: 50px; height: 50px; border-radius: 50%; 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: 22px; flex-shrink: 0; 
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+/* Detail Teks */
+.widget-details { display: flex; flex-direction: column; justify-content: center; }
+.widget-details .label { font-size: 11px; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+.value-box { font-size: 26px; font-weight: 800; line-height: 1; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+.value-box small { font-size: 14px; font-weight: 700; color: #64748b; margin-left: 4px; text-shadow: none; }
+
+/* --- WARNA-WARNI NEON --- */
+
+/* Biru (Arus) */
+.icon-blue i { color: #38bdf8; filter: drop-shadow(0 0 5px #38bdf8); }
+.text-blue { color: #38bdf8; }
+.fill-blue { background: linear-gradient(90deg, #0ea5e9, #38bdf8); box-shadow: 0 0 10px #0ea5e9; }
+
+/* Orange (Tegangan) */
+.icon-orange i { color: #fbbf24; filter: drop-shadow(0 0 5px #fbbf24); }
+.text-orange { color: #fbbf24; }
+.fill-orange { background: linear-gradient(90deg, #d97706, #fbbf24); box-shadow: 0 0 10px #d97706; }
+
+/* Ungu (Durasi) */
+.icon-purple i { color: #c084fc; filter: drop-shadow(0 0 5px #c084fc); }
+.text-purple { color: #c084fc; }
+.fill-purple { background: linear-gradient(90deg, #9333ea, #c084fc); box-shadow: 0 0 10px #9333ea; }
+
+/* Merah (Daya) */
+.icon-red i { color: #f87171; filter: drop-shadow(0 0 5px #f87171); }
+.text-red { color: #f87171; }
+.fill-red { background: linear-gradient(90deg, #dc2626, #f87171); box-shadow: 0 0 10px #dc2626; }
+
+/* Pink (Medan) */
+.icon-pink i { color: #f472b6; filter: drop-shadow(0 0 5px #f472b6); }
+.text-pink { color: #f472b6; }
+.fill-pink { background: linear-gradient(90deg, #db2777, #f472b6); box-shadow: 0 0 10px #db2777; }
+
+/* Hijau (Biaya) */
+.icon-green i { color: #4ade80; filter: drop-shadow(0 0 5px #4ade80); }
+.text-green { color: #4ade80; }
+.fill-green { background: linear-gradient(90deg, #16a34a, #4ade80); box-shadow: 0 0 10px #16a34a; }
+
+
+/* Progress Bar Background Gelap */
+.progress-bg { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; margin-top: 15px; position: relative; z-index: 11; }
+.progress-fill { height: 100%; border-radius: 10px; transition: width 0.5s ease; }
+
+
+/* =========================================
+   6. PANEL KONTROL
+   ========================================= */
+.control-panel { 
+    grid-row: span 2; 
+    display: flex; flex-direction: column; gap: 20px;
+}
+
+.card-header { border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 11; }
+.card-title { font-weight: 700; color: #f8fafc; font-size: 16px; display: flex; gap: 10px; align-items: center; }
+
+.control-group { position: relative; z-index: 11; }
+.control-group label { font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 8px; }
+.control-row { display: flex; align-items: center; gap: 10px; }
+#durationValue { font-weight: bold; color: #38bdf8; width: 40px; text-align: right; }
+
+/* Slider Gelap */
+.slider { width: 100%; height: 6px; background: #334155; border-radius: 5px; outline: none; -webkit-appearance: none; }
+.slider::-webkit-slider-thumb { 
+    -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; 
+    background: #38bdf8; cursor: pointer; border: 2px solid #fff; 
+    box-shadow: 0 0 10px #38bdf8; 
+}
+
+/* Select Gelap */
+.form-select { 
+    width: 100%; padding: 12px; border-radius: 8px; 
+    border: 1px solid #334155; 
+    color: #f1f5f9; font-weight: 600; 
+    outline: none; background: #0f172a; cursor: pointer; 
+}
+.form-select:hover { border-color: #38bdf8; }
+
+/* Timer Box */
+.timer-box { background: #0b1120; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #334155; position: relative; z-index: 11; }
+.timer-display { 
+    font-size: 32px; font-weight: 800; font-family: monospace; letter-spacing: 2px;
+    background: linear-gradient(to right, #38bdf8, #818cf8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+}
+
+.btn-group { display: flex; flex-direction: column; gap: 10px; position: relative; z-index: 11; }
+.btn { padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+
+.btn-primary { background: linear-gradient(90deg, #0ea5e9, #2563eb); color: #fff; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3); } 
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(14, 165, 233, 0.6); }
+
+.btn-stop { background: linear-gradient(90deg, #ef4444, #b91c1c); color: #fff; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); } 
+.btn-stop:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
+
+.btn-pdf { background: transparent; color: #f87171; border: 2px solid #f87171; } 
+.btn-pdf:hover { background: #f87171; color: #fff; box-shadow: 0 0 15px #f87171; }
+
+.btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; border: 1px solid #334155; cursor: pointer; background: #1e293b; color: #94a3b8; } 
+.btn-sm:hover { border-color: #ef4444; color: #ef4444; }
+
+
+/* =========================================
+   7. HOME PAGE (BINGKAI NEON)
+   ========================================= */
+#home {
+    height: 100%; width: 100%; 
+    position: relative; 
+    border-radius: 16px; 
+    overflow: hidden; 
+    background: #1e293b; 
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    cursor: default;
+}
+
+#home::before {
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('Home.jpg');
+    background-size: cover; background-position: center; background-repeat: no-repeat; 
+    z-index: 1;
+    opacity: 0.8; /* Sedikit gelap agar menyatu dengan tema */
+}
+
+/* =========================================
+   8. HISTORY PAGE (FULL TABEL DARK)
+   ========================================= */
+.history-layout {
+    display: flex; 
+    flex-direction: column;
+    height: calc(100vh - 140px);
+}
+
+.table-card {
+    flex: 1; 
+    display: flex; flex-direction: column;
+}
+
+.table-scroll-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 10px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    position: relative; z-index: 11;
+}
+
+/* Scrollbar Custom Keren */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* TABEL DARK */
+.custom-table { width: 100%; border-collapse: collapse; }
+.custom-table th { 
+    background: #0f172a; /* Header Hitam Kebiruan */
+    color: #38bdf8; /* Teks Biru Neon */
+    font-size: 13px; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    padding: 18px; 
+    text-align: left; 
+    position: sticky; 
+    top: 0; 
+    z-index: 10;
+    border-bottom: 2px solid #334155;
+    letter-spacing: 1px;
+}
+
+.custom-table td { 
+    padding: 15px 18px; 
+    font-size: 14px; 
+    color: #cbd5e1; 
+    border-bottom: 1px solid #334155; 
+}
+
+/* Zebra Striping Dark */
+.custom-table tbody tr:nth-child(even) { background-color: #172033; }
+.custom-table tbody tr:hover { 
+    background-color: #1e293b; 
+    box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.1); 
+    cursor: default; 
+    color: #fff;
+}
+
+/* ANIMASI */
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes holoSheen { 
+    0% { left: -150%; opacity: 0; } 
+    30% { opacity: 1; } 
+    60% { opacity: 1; } 
+    100% { left: 150%; opacity: 0; } 
+}
