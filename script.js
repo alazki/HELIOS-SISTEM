@@ -1,7 +1,7 @@
 // --- VARIABEL GLOBAL ---
 let timerInterval;
-let totalSeconds = 0;       // Penghitung waktu berjalan (Detik)
-let targetSeconds = 0;      // Durasi target yang diset
+let totalSeconds = 0;
+let targetSeconds = 0;
 let isRunning = false;
 
 // Nilai Default Sistem
@@ -11,14 +11,13 @@ let currentSettings = {
     voltage: 1.36
 };
 
-// Data Riwayat (Disimpan di LocalStorage)
+// Data Riwayat
 let historyData = JSON.parse(localStorage.getItem('heliosData')) || [];
 
 // --- FUNGSI UTAMA SAAT LOAD ---
 function init() {
     loadHistory();
     updateDisplayValues();
-    // Pastikan class 'active' dihapus saat load agar animasi diam
     document.getElementById('waveAnim').classList.remove('active');
 }
 
@@ -34,12 +33,11 @@ function switchPage(pageId) {
     if(pageId === 'history') document.querySelectorAll('.nav-item')[2].classList.add('active');
 }
 
-// Update UI saat Slider digeser
+// Update UI
 function updateDurationUI(val) {
     document.getElementById('durationValue').textContent = val + ' m';
 }
 
-// Update UI saat Dropdown Preset dipilih
 function updatePreset(val) {
     const v = parseInt(val);
     if(v === 100) { 
@@ -64,8 +62,7 @@ function updateDisplayValues() {
     document.getElementById('barVoltage').style.width = (currentSettings.voltage / 5 * 100) + "%";
 }
 
-// --- LOGIKA TIMER & ANIMASI START/STOP ---
-
+// --- LOGIKA TIMER ---
 function startExperiment() {
     if (isRunning) return;
     
@@ -79,24 +76,19 @@ function startExperiment() {
     document.getElementById('durationSlider').disabled = true;
     document.getElementById('pwmSelect').disabled = true;
     
-    // 1. Update Status Badge
     document.getElementById('systemStatus').classList.add('running');
     document.getElementById('statusText').textContent = "PAPARAN AKTIF";
-    
-    // 2. Aktifkan Animasi Gelombang
     document.getElementById('waveAnim').classList.add('active');
 
     timerInterval = setInterval(() => {
         totalSeconds++;
         
-        // Update Timer Mundur
         const remaining = targetSeconds - totalSeconds;
         const h = Math.floor(remaining / 3600).toString().padStart(2, '0');
         const m = Math.floor((remaining % 3600) / 60).toString().padStart(2, '0');
         const s = (remaining % 60).toString().padStart(2, '0');
         document.getElementById('timerDisplay').textContent = `${h}:${m}:${s}`;
         
-        // Update Durasi Aktif
         const activeM = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
         const activeS = (totalSeconds % 60).toString().padStart(2, '0');
         document.getElementById('valDuration').textContent = `${activeM}:${activeS}`;
@@ -145,23 +137,15 @@ function resetSystem() {
     document.getElementById('durationSlider').disabled = false;
     document.getElementById('pwmSelect').disabled = false;
     
-    // Reset UI Status
     document.getElementById('systemStatus').classList.remove('running');
     document.getElementById('statusText').textContent = "Standby";
-    
-    // Matikan Animasi
     document.getElementById('waveAnim').classList.remove('active');
-    
-    // Reset Timer Display
     document.getElementById('timerDisplay').textContent = "00:00:00";
-
-    // Reset Widget Durasi Aktif
     document.getElementById('valDuration').textContent = "00:00";
     document.getElementById('barDuration').style.width = "0%";
 }
 
-// --- DATA HISTORIS & LOGGING ---
-
+// --- LOGGING DATA ---
 function saveData() {
     const now = new Date();
     const data = {
@@ -212,32 +196,72 @@ function clearHistory() {
     }
 }
 
-// --- PDF EXPORT FUNCTION ---
+// --- PDF EXPORT FUNCTION (DIPERBARUI DENGAN AUTOTABLE) ---
 function downloadPDF() {
+    // Memastikan library dimuat
     const { jsPDF } = window.jspdf;
+    
+    // Inisialisasi dokumen PDF (Portrait, mm, A4)
     const doc = new jsPDF();
     
-    doc.setFontSize(16);
-    doc.text("Laporan Data HELIOS System", 14, 20);
-    doc.setFontSize(10);
-    doc.text("Dicetak pada: " + new Date().toLocaleString(), 14, 30);
+    // 1. Judul & Header Laporan
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.setTextColor(22, 163, 74); // Warna Hijau Gelap
+    doc.text("Laporan HELIOS System", 14, 22);
     
-    let y = 40;
+    doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text("Rekapitulasi Data Stimulasi Magnetik", 14, 28);
+    doc.text("Dicetak pada: " + new Date().toLocaleString('id-ID'), 14, 34);
     
-    doc.text("Tgl/Waktu | Target | Durasi | Biaya", 14, y);
-    doc.line(14, y+2, 180, y+2);
-    y += 10;
+    // 2. Persiapan Data untuk Tabel
+    // Kita perlu mengubah object historyData menjadi Array of Arrays
+    const tableColumn = ["No", "Tanggal", "Waktu", "Target", "Arus", "Durasi", "Biaya"];
+    const tableRows = [];
 
-    historyData.forEach((row, i) => {
-        const text = `${row.date} ${row.time} | ${row.target} | ${row.duration} | ${row.cost}`;
-        doc.text(text, 14, y);
-        y += 8;
-        if (y > 280) { doc.addPage(); y = 20; }
+    historyData.forEach((row, index) => {
+        // Ambil data dari object
+        const rowData = [
+            historyData.length - index, // Nomor urut (sesuai tampilan tabel)
+            row.date,
+            row.time,
+            row.target,
+            row.current,
+            row.duration,
+            row.cost
+        ];
+        tableRows.push(rowData);
+    });
+
+    // 3. Generate Tabel Menggunakan AutoTable
+    doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 40, // Posisi Y tabel dimulai
+        theme: 'grid', // Tema tabel: 'striped', 'grid', 'plain'
+        styles: { 
+            fontSize: 9, 
+            cellPadding: 3,
+            valign: 'middle'
+        },
+        headStyles: {
+            fillColor: [16, 185, 129], // Warna Header Hijau (sesuai tema web)
+            textColor: 255,
+            fontStyle: 'bold'
+        },
+        alternateRowStyles: {
+            fillColor: [240, 253, 244] // Warna selang-seling hijau muda
+        },
+        columnStyles: {
+            0: { cellWidth: 10, halign: 'center' }, // Kolom No
+            6: { halign: 'right', fontStyle: 'bold', textColor: [22, 163, 74] } // Kolom Biaya Rata Kanan & Hijau
+        }
     });
     
-    doc.save("Laporan_Helios.pdf");
+    // 4. Simpan File
+    doc.save("Laporan_HELIOS_Final.pdf");
 }
 
-// Jalankan fungsi init saat script di-load
 init();
