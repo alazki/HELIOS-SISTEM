@@ -1,227 +1,243 @@
-// --- SETUP GLOBAL ---
-let timerInterval, seconds = 0, isRunning = false;
+// --- VARIABEL GLOBAL ---
+let timerInterval;
+let totalSeconds = 0;       // Penghitung waktu berjalan (Detik)
+let targetSeconds = 0;      // Durasi target yang diset
+let isRunning = false;
 
-// Default values (start at 100 µT setting)
-let activeCurrent = 0.33; 
-let activeVoltage = 1.36;
-let activeField = 100;
+// Nilai Default Sistem
+let currentSettings = {
+    field: 100,
+    current: 0.33,
+    voltage: 1.36
+};
 
-// --- LOAD DATA (LocalStorage) ---
-let historyData = JSON.parse(localStorage.getItem('heliosHistory'));
+// Data Riwayat (Disimpan di LocalStorage)
+let historyData = JSON.parse(localStorage.getItem('heliosData')) || [];
 
-// Data Dummy jika kosong (Agar tabel tidak kosong saat pertama run)
-if (!historyData || historyData.length === 0) {
-    historyData = [
-        { date: '26/11/2025', time: '10:00', duration: 45, field: 100, current: 0.33, voltage: 1.36, power: 0.45, cost: '0.49' },
-        { date: '26/11/2025', time: '13:00', duration: 30, field: 200, current: 0.67, voltage: 2.75, power: 1.84, cost: '1.33' }
-    ];
-    localStorage.setItem('heliosHistory', JSON.stringify(historyData));
+// --- FUNGSI UTAMA SAAT LOAD ---
+function init() {
+    loadHistory();
+    updateDisplayValues();
+    // Pastikan class 'active' dihapus saat load agar animasi diam
+    document.getElementById('waveAnim').classList.remove('active');
 }
 
-// --- NAVIGASI ---
-function switchPage(p) {
-    document.querySelectorAll('.page').forEach(e => e.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
-    document.getElementById(p).classList.add('active');
-    event.currentTarget.classList.add('active');
-}
-
-// --- KONTROL UI ---
-function updateDuration(v) {
-    document.getElementById('durationValue').textContent = v + ' m';
-}
-
-function updatePWM(val) {
-    let selectedVal = parseInt(val);
+// Navigasi Halaman
+function switchPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
     
-    // LOGIKA UTAMA SESUAI TABEL GAMBAR
-    if(selectedVal === 100) {
-        activeField = 100;
-        activeCurrent = 0.33;
-        activeVoltage = 1.36;
-    } else if(selectedVal === 200) {
-        activeField = 200;
-        activeCurrent = 0.67;
-        activeVoltage = 2.75;
-    } else if(selectedVal === 300) {
-        activeField = 300;
-        activeCurrent = 1.00;
-        activeVoltage = 4.11;
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    
+    if(pageId === 'home') document.querySelectorAll('.nav-item')[0].classList.add('active');
+    if(pageId === 'dashboard') document.querySelectorAll('.nav-item')[1].classList.add('active');
+    if(pageId === 'history') document.querySelectorAll('.nav-item')[2].classList.add('active');
+}
+
+// Update UI saat Slider digeser
+function updateDurationUI(val) {
+    document.getElementById('durationValue').textContent = val + ' m';
+}
+
+// Update UI saat Dropdown Preset dipilih
+function updatePreset(val) {
+    const v = parseInt(val);
+    if(v === 100) { 
+        currentSettings = { field: 100, current: 0.33, voltage: 1.36 }; 
+    } else if(v === 200) { 
+        currentSettings = { field: 200, current: 0.67, voltage: 2.75 }; 
+    } else if(v === 300) { 
+        currentSettings = { field: 300, current: 1.00, voltage: 4.11 }; 
     }
-
-    // Update Tampilan Angka Widget
-    document.getElementById('monitorField').textContent = activeField;
-    document.getElementById('monitorCurrent').textContent = activeCurrent.toFixed(2);
-    document.getElementById('monitorVoltage').textContent = activeVoltage.toFixed(2);
-    
-    // Update Progress Bar Visual (Skala disesuaikan agar bar terlihat bergerak)
-    // Asumsi Max Visual: 1.5A dan 5V
-    document.getElementById('currentBar').style.width = (activeCurrent / 1.5 * 100) + '%';
-    document.getElementById('voltageBar').style.width = (activeVoltage / 5 * 100) + '%';
-
-    updateMonitoring();
+    updateDisplayValues();
 }
 
-function updateMonitoring() {
-    const c = activeCurrent;
-    const v = activeVoltage;
+function updateDisplayValues() {
+    document.getElementById('valField').textContent = currentSettings.field;
+    document.getElementById('valCurrent').textContent = currentSettings.current.toFixed(2);
+    document.getElementById('valVoltage').textContent = currentSettings.voltage.toFixed(2);
     
-    // Rumus Daya P = V * I
-    const p = (c * v).toFixed(2);
-    
-    // Perhitungan Biaya (Simulasi Real-time)
-    const m = Math.floor(seconds / 60); // menit berjalan
-    const r = 1444; // Tarif per kWh
-    // Rumus: (Watt/1000) * (Jam) * Tarif
-    const cost = ((p / 1000) * (m / 60) * r).toFixed(2);
-        
-    document.getElementById('monitorPower').textContent = p;
-    document.getElementById('monitorCost').textContent = cost;
-    
-    // Visual bar biaya
-    document.getElementById('costBar').style.width = Math.min((parseFloat(cost) / 50 * 100), 100) + '%';
+    const power = (currentSettings.current * currentSettings.voltage).toFixed(2);
+    document.getElementById('valPower').textContent = power;
+
+    document.getElementById('barCurrent').style.width = (currentSettings.current / 1.5 * 100) + "%";
+    document.getElementById('barVoltage').style.width = (currentSettings.voltage / 5 * 100) + "%";
 }
 
-// --- TIMER SYSTEM ---
+// --- LOGIKA TIMER & ANIMASI START/STOP ---
+
 function startExperiment() {
-    if (!isRunning) {
-        isRunning = true;
-        const d = parseInt(document.getElementById('durationSlider').value);
+    if (isRunning) return;
+    
+    const durationMin = parseInt(document.getElementById('durationSlider').value);
+    targetSeconds = durationMin * 60;
+    totalSeconds = 0; 
+    
+    isRunning = true;
+    document.getElementById('btnStart').disabled = true;
+    document.getElementById('btnStop').disabled = false;
+    document.getElementById('durationSlider').disabled = true;
+    document.getElementById('pwmSelect').disabled = true;
+    
+    // 1. Update Status Badge
+    document.getElementById('systemStatus').classList.add('running');
+    document.getElementById('statusText').textContent = "PAPARAN AKTIF";
+    
+    // 2. Aktifkan Animasi Gelombang
+    document.getElementById('waveAnim').classList.add('active');
+
+    timerInterval = setInterval(() => {
+        totalSeconds++;
         
-        timerInterval = setInterval(() => {
-            seconds++;
-            const h = Math.floor(seconds / 3600),
-                m = Math.floor((seconds % 3600) / 60),
-                s = seconds % 60;
-            
-            // Format 00:00:00
-            document.getElementById('timer').textContent = 
-                `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-            
-            // Update widget durasi
-            const cm = Math.floor(seconds / 60);
-            document.getElementById('monitorDuration').textContent = cm;
-            document.getElementById('durationBar').style.width = (cm / d * 100) + '%';
-            
-            updateMonitoring(); // Update biaya real-time
-            
-            // Stop otomatis jika waktu habis
-            if (seconds >= d * 60) {
-                stopExperiment();
-                alert('Percobaan selesai!');
-            }
-        }, 1000);
-    }
+        // Update Timer Mundur
+        const remaining = targetSeconds - totalSeconds;
+        const h = Math.floor(remaining / 3600).toString().padStart(2, '0');
+        const m = Math.floor((remaining % 3600) / 60).toString().padStart(2, '0');
+        const s = (remaining % 60).toString().padStart(2, '0');
+        document.getElementById('timerDisplay').textContent = `${h}:${m}:${s}`;
+        
+        // Update Durasi Aktif
+        const activeM = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+        const activeS = (totalSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('valDuration').textContent = `${activeM}:${activeS}`;
+        
+        const progressPercent = (totalSeconds / targetSeconds) * 100;
+        document.getElementById('barDuration').style.width = progressPercent + "%";
+        
+        calculateRealtimeCost();
+
+        if (totalSeconds >= targetSeconds) {
+            finishExperiment();
+        }
+        
+    }, 1000);
+}
+
+function calculateRealtimeCost() {
+    const powerW = parseFloat(document.getElementById('valPower').textContent);
+    const tarifPerKwh = 1444; 
+    const hours = totalSeconds / 3600;
+    const cost = (powerW / 1000) * hours * tarifPerKwh;
+    
+    document.getElementById('valCost').textContent = cost.toFixed(2);
+    document.getElementById('barCost').style.width = Math.min((cost / 5 * 100), 100) + "%";
 }
 
 function stopExperiment() {
-    if (isRunning) {
-        clearInterval(timerInterval);
-        isRunning = false;
-        
-        saveToHistory(); // Simpan data saat stop ditekan
-        
-        // Reset Timer UI
-        seconds = 0;
-        document.getElementById('timer').textContent = "00:00:00";
-        document.getElementById('monitorDuration').textContent = "0";
-        document.getElementById('durationBar').style.width = "0%";
-        alert('Data tersimpan!');
-    }
+    if(!isRunning) return;
+    clearInterval(timerInterval);
+    saveData();
+    resetSystem();
+    alert('Proses dihentikan manual. Data tersimpan.');
 }
 
-// --- LOG DATA & SAVING ---
-function saveToHistory() {
-    const c = activeCurrent;
-    const v = activeVoltage;
-    const f = activeField;
-    const d = Math.floor(seconds / 60); // Durasi (menit)
-    const p = (c * v).toFixed(2);
+function finishExperiment() {
+    clearInterval(timerInterval);
+    saveData();
+    resetSystem();
+    alert('Durasi paparan selesai!');
+}
+
+function resetSystem() {
+    isRunning = false;
+    document.getElementById('btnStart').disabled = false;
+    document.getElementById('btnStop').disabled = true;
+    document.getElementById('durationSlider').disabled = false;
+    document.getElementById('pwmSelect').disabled = false;
     
-    // HITUNG BIAYA FINAL UNTUK DATABASE
-    const r_tarif = 1444; 
-    const costVal = ((p / 1000) * (d / 60) * r_tarif).toFixed(2);
+    // Reset UI Status
+    document.getElementById('systemStatus').classList.remove('running');
+    document.getElementById('statusText').textContent = "Standby";
     
+    // Matikan Animasi
+    document.getElementById('waveAnim').classList.remove('active');
+    
+    // Reset Timer Display
+    document.getElementById('timerDisplay').textContent = "00:00:00";
+
+    // Reset Widget Durasi Aktif
+    document.getElementById('valDuration').textContent = "00:00";
+    document.getElementById('barDuration').style.width = "0%";
+}
+
+// --- DATA HISTORIS & LOGGING ---
+
+function saveData() {
     const now = new Date();
-    
-    const newData = {
+    const data = {
+        no: historyData.length + 1,
         date: now.toLocaleDateString('id-ID'),
-        time: now.toLocaleTimeString('id-ID', {hour: '2-digit', minute: '2-digit'}),
-        duration: d,
-        field: f,
-        current: c,
-        voltage: v,
-        power: p,
-        cost: costVal // Simpan biaya
+        time: now.toLocaleTimeString('id-ID'),
+        target: currentSettings.field + ' µT',
+        current: currentSettings.current + ' A',
+        duration: `${Math.floor(totalSeconds/60)}m ${totalSeconds%60}s`,
+        cost: 'Rp ' + document.getElementById('valCost').textContent
     };
-        
-    historyData.unshift(newData); // Tambah ke atas array
-    if (historyData.length > 50) historyData.pop(); // Batasi max 50 data
     
-    localStorage.setItem('heliosHistory', JSON.stringify(historyData));
-    loadHistoryData();
+    historyData.unshift(data);
+    localStorage.setItem('heliosData', JSON.stringify(historyData));
+    loadHistory();
 }
 
-function loadHistoryData() {
-    const b = document.getElementById('historyBody');
-    b.innerHTML = '';
+function loadHistory() {
+    const tbody = document.getElementById('historyBody');
+    tbody.innerHTML = '';
     
-    historyData.forEach((r, i) => {
+    if(historyData.length === 0) {
+       tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:#94a3b8;">Belum ada data terekam</td></tr>';
+       return;
+    }
+
+    historyData.forEach((row, index) => {
         const tr = document.createElement('tr');
-        
-        // Cek jika cost undefined (untuk data lama), set 0
-        const displayCost = r.cost ? r.cost : "0.00"; 
-        
+        const num = historyData.length - index;
         tr.innerHTML = `
-            <td>${i + 1}</td>
-            <td>${r.date}</td>
-            <td>${r.time}</td>
-            <td>${r.field} µT</td>
-            <td>${r.current} A</td>
-            <td>${r.voltage} V</td>
-            <td>${r.power} W</td>
-            <td style="color:#4ade80; font-weight:bold;">Rp ${displayCost}</td>
+            <td>${num}</td>
+            <td>${row.date}</td>
+            <td>${row.time}</td>
+            <td>${row.target}</td>
+            <td>${row.current}</td>
+            <td>${row.duration}</td>
+            <td style="color:#16a34a; font-weight:bold">${row.cost}</td>
         `;
-        b.appendChild(tr);
+        tbody.appendChild(tr);
     });
 }
 
 function clearHistory() {
-    if(confirm('Hapus semua riwayat data?')) {
+    if(confirm('Hapus semua log data?')) {
         historyData = [];
-        localStorage.removeItem('heliosHistory');
-        loadHistoryData();
+        localStorage.removeItem('heliosData');
+        loadHistory();
     }
 }
 
-// --- PDF EXPORT ---
-async function downloadPDF() {
+// --- PDF EXPORT FUNCTION ---
+function downloadPDF() {
     const { jsPDF } = window.jspdf;
-    const element = document.getElementById('reportArea');
-    document.body.style.cursor = 'wait';
+    const doc = new jsPDF();
     
-    html2canvas(element, { scale: 2, backgroundColor: '#1e293b' }).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-        
-        pdf.setFillColor(30, 41, 59); // Set background PDF gelap
-        pdf.rect(0, 0, pdfWidth, 297, 'F');
-        
-        pdf.setFontSize(16);
-        pdf.setTextColor(255, 255, 255);
-        pdf.text("Laporan Data HELIOS", 10, 15);
-        
-        pdf.addImage(imgData, 'PNG', 0, 25, pdfWidth, pdfHeight);
-        pdf.save("Laporan_HELIOS.pdf");
-        
-        document.body.style.cursor = 'default';
+    doc.setFontSize(16);
+    doc.text("Laporan Data HELIOS System", 14, 20);
+    doc.setFontSize(10);
+    doc.text("Dicetak pada: " + new Date().toLocaleString(), 14, 30);
+    
+    let y = 40;
+    doc.setFontSize(10);
+    
+    doc.text("Tgl/Waktu | Target | Durasi | Biaya", 14, y);
+    doc.line(14, y+2, 180, y+2);
+    y += 10;
+
+    historyData.forEach((row, i) => {
+        const text = `${row.date} ${row.time} | ${row.target} | ${row.duration} | ${row.cost}`;
+        doc.text(text, 14, y);
+        y += 8;
+        if (y > 280) { doc.addPage(); y = 20; }
     });
+    
+    doc.save("Laporan_Helios.pdf");
 }
 
-// Init Function
-window.addEventListener('DOMContentLoaded', () => {
-    loadHistoryData();
-    updateMonitoring(); // Jalankan sekali untuk set tampilan awal
-});
+// Jalankan fungsi init saat script di-load
+init();
