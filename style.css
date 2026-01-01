@@ -44,7 +44,7 @@ body {
     padding: 20px; 
     position: relative; 
     background: #f1f5f9; 
-    overflow-y: auto; /* Memungkinkan scroll konten di dalamnya */
+    overflow-y: auto; 
     height: 100%;
 }
 
@@ -154,108 +154,29 @@ body {
 .home-content .description { font-size: 15px; color: #cbd5e1; margin-bottom: 40px; line-height: 1.7; max-width: 500px; margin-left: auto; margin-right: auto; }
 .btn-start-hero { padding: 16px 40px; border-radius: 50px; border: none; background: #10b981; color: white; font-weight: bold; cursor: pointer; font-size: 16px; box-shadow: 0 0 25px rgba(16,185,129,0.3); display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s ease; }
 
-/* ==========================================================================
-   MOBILE & RESPONSIVE STYLES (KHUSUS HP)
-   ========================================================================== */
+/* ================= MOBILE & RESPONSIVE ================= */
 @media screen and (max-width: 768px) {
-    
-    /* 1. Body & Scroll behavior */
-    body {
-        height: auto;
-        min-height: 100vh;
-        overflow-y: auto; /* Enable scroll di HP */
-    }
-
-    /* 2. Layout Structure */
-    .container {
-        flex-direction: column; /* Stack vertikal */
-        height: auto;
-    }
-
-    /* 3. Ubah Sidebar jadi Menu Bawah */
+    body { height: auto; min-height: 100vh; overflow-y: auto; }
+    .container { flex-direction: column; height: auto; }
     .sidebar {
-        width: 100%;
-        height: 60px;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        flex-direction: row; /* Icon Horizontal */
-        border-right: none;
-        border-top: 1px solid #e2e8f0;
-        padding: 0;
-        justify-content: space-around;
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-        z-index: 1000;
+        width: 100%; height: 60px; position: fixed; bottom: 0; left: 0;
+        flex-direction: row; border-right: none; border-top: 1px solid #e2e8f0;
+        padding: 0; justify-content: space-around; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 1000;
     }
-
-    /* Sembunyikan Logo & Footer di Nav Bawah */
     .logo, .sidebar-footer { display: none; }
-
-    .nav-menu {
-        display: flex;
-        flex-direction: row;
-        padding: 0;
-        width: 100%;
-        justify-content: space-around;
-        align-items: center;
-    }
-
-    .nav-item {
-        margin: 0;
-        padding: 8px;
-        flex-direction: column; /* Icon atas, Teks bawah */
-        gap: 4px;
-        font-size: 10px;
-        border-radius: 0;
-        background: transparent !important;
-        color: #94a3b8;
-        box-shadow: none !important;
-    }
-
+    .nav-menu { display: flex; flex-direction: row; padding: 0; width: 100%; justify-content: space-around; align-items: center; }
+    .nav-item { margin: 0; padding: 8px; flex-direction: column; gap: 4px; font-size: 10px; border-radius: 0; background: transparent !important; color: #94a3b8; box-shadow: none !important; }
     .nav-item i { font-size: 20px; color: inherit; }
-
-    /* Active State Mobile */
-    .nav-item.active { color: #10b981; }
-    .nav-item.active i { color: #10b981; }
-
-    /* 4. Main Content Adjustments */
-    .main-content {
-        padding: 15px;
-        margin-bottom: 70px; /* Spasi untuk menu bawah */
-        height: auto;
-        overflow: visible;
-    }
-
+    .nav-item.active { color: #10b981; } .nav-item.active i { color: #10b981; }
+    .main-content { padding: 15px; margin-bottom: 70px; height: auto; overflow: visible; }
     .header h1 { font-size: 18px; }
-
-    /* 5. Dashboard Grid -> Stack ke Bawah */
-    .dashboard-grid {
-        display: flex;
-        flex-direction: column;
-        height: auto;
-        gap: 15px;
-    }
-
-    .control-panel { order: 1; } /* Panel kontrol selalu paling atas */
-
-    .card, .widget-card {
-        padding: 15px;
-        min-height: auto;
-    }
-
+    .dashboard-grid { display: flex; flex-direction: column; height: auto; gap: 15px; }
+    .control-panel { order: 1; }
+    .card, .widget-card { padding: 15px; min-height: auto; }
     .value-box { font-size: 24px; }
-
-    /* 6. Home Page Adjustments */
-    .home-wrapper {
-        border-radius: 10px;
-        min-height: 80vh;
-    }
+    .home-wrapper { border-radius: 10px; min-height: 80vh; }
     .home-content h1 { font-size: 42px; }
     .home-content .subtitle { font-size: 14px; letter-spacing: 2px; }
     .btn-start-hero { width: 100%; justify-content: center; }
-
-    /* 7. History Table Fix */
-    .table-scroll-wrapper {
-        box-shadow: inset -10px 0 10px -10px rgba(0,0,0,0.1);
-    }
+    .table-scroll-wrapper { box-shadow: inset -10px 0 10px -10px rgba(0,0,0,0.1); }
 }
