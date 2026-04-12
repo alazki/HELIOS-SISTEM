@@ -6,10 +6,13 @@
     <title>HELIOS System Dashboard</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -31,10 +34,17 @@
                 <div class="nav-item" onclick="switchPage('history')">
                     <i class="fas fa-database"></i><span>Data Historis</span>
                 </div>
+                <div class="nav-item" onclick="switchPage('specs')">
+                    <i class="fas fa-microchip"></i><span>Spesifikasi</span>
+                </div>
+                <div class="nav-item" onclick="switchPage('about')">
+                    <i class="fas fa-users"></i><span>Tentang</span>
+                </div>
             </div>
             
             <div class="sidebar-footer">
-                <p>© 2025 HELIOS Project</p><p>Tugas Akhir Teknik Elektro</p>
+                <p>© 2025 HELIOS Project</p>
+                <p>Tugas Akhir Teknik Elektro</p>
             </div>
         </div>
 
@@ -42,40 +52,150 @@
             
             <div id="home" class="page active">
                 <div class="home-wrapper">
-                    <div class="nature-bg">
-                        <div class="leaf l1"><i class="fas fa-leaf"></i></div>
-                        <div class="leaf l2"><i class="fas fa-seedling"></i></div>
-                        <div class="leaf l3"><i class="fas fa-leaf"></i></div>
-                        <div class="leaf l4"><i class="fas fa-leaf"></i></div>
-                        <div class="leaf l5"><i class="fas fa-cannabis"></i></div>
-                        <div class="leaf l6"><i class="fas fa-seedling"></i></div>
-                    </div>
+                    <!-- Agricultural Background -->
+                    <div class="futuristic-bg">
+                        <div class="grid-overlay"></div>
+                        
+                        <!-- Agricultural Elements -->
+                        <div class="home-graphic" aria-hidden="true">
+                            <!-- Modern abstract background grid (subtle) -->
+                            <svg class="graphic-grid" viewBox="0 0 480 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="g1" x1="0" x2="1">
+                                        <stop offset="0" stop-color="#e6f7fb" />
+                                        <stop offset="1" stop-color="#f0fdf4" />
+                                    </linearGradient>
+                                </defs>
+                                <rect x="0" y="0" width="100%" height="100%" fill="url(#g1)" opacity="0.0" />
+                                <!-- thin circuit lines -->
+                                <g stroke="currentColor" stroke-width="0.5" opacity="0.06" fill="none">
+                                    <path d="M20 40 L200 40 L200 120 L420 120" />
+                                    <path d="M40 20 L40 200 L160 200 L160 260" />
+                                    <circle cx="220" cy="60" r="6" />
+                                    <circle cx="120" cy="180" r="4" />
+                                </g>
+                            </svg>
+
+                            <!-- Minimal device mockup -->
+                            <div class="device-card">
+                                <div class="device-screen">
+                                    <div class="dash-line" style="width:70%"></div>
+                                    <div class="dash-line short"></div>
+                                    <div class="dash-grid">
+                                        <span></span><span></span><span></span>
+                                    </div>
+                                </div>
+                                <div class="device-stand"></div>
+                            </div>
+
+                            <!-- small floating panels -->
+                            <div class="floating-panel p1"></div>
+                            <div class="floating-panel p2"></div>
+                        </div>
+
+                        <!-- Decorative Seed Badge (minimal, elegant) -->
+                        <div class="seed-badge" aria-hidden="true">
+                            <svg class="seed-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                                <defs>
+                                        <linearGradient id="seedStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#06b6d4" />
+                                            <stop offset="100%" stop-color="#10b981" />
+                                        </linearGradient>
+                                    </defs>
+                                    <g fill="none" stroke="currentColor" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" opacity="0.06">
+                                    <ellipse cx="60" cy="60" rx="26" ry="38" transform="rotate(-18 60 60)" />
+                                    <path d="M54 46c6 8 12 14 18 26" />
+                                </g>
+                            </svg>
+                        </div>
+
+                        <div class="gradient-orb orb1"></div>
+                        <div class="gradient-orb orb2"></div>
+                        <div class="gradient-orb orb3"></div>
+                        <div class="particle p1"></div>
+                        <div class="particle p2"></div>
+                        <div class="particle p3"></div>
+                        <div class="particle p4"></div>
+                        <div class="particle p5"></div>
+                        <div class="particle p6"></div>
+                        </div>
+
+                        <!-- Crisp static cover emblem (replaces blurry decorative layers) -->
+                        <div class="cover-crisp" aria-hidden="true">
+                            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="cgrad" x1="0" x2="1">
+                                        <stop offset="0" stop-color="#06b6d4" />
+                                        <stop offset="1" stop-color="#10b981" />
+                                    </linearGradient>
+                                </defs>
+                                <!-- outer ring -->
+                                <circle cx="100" cy="100" r="70" class="ring" />
+                                <!-- inner ring -->
+                                <circle cx="100" cy="100" r="44" class="ring inner" />
+                                <!-- minimal seed line -->
+                                <path d="M96 72 C88 92, 110 106, 112 126" class="seed" />
+                            </svg>
+                        </div>
+
+                        <div class="agri-motion" aria-hidden="true">
+                            <i class="fas fa-seedling sprout s1"></i>
+                            <i class="fas fa-leaf sprout s2"></i>
+                            <i class="fas fa-seedling sprout s3"></i>
+                        </div>
+
+                        <div class="home-orbit" aria-hidden="true">
+                            <span class="orbit-line"></span>
+                            <span class="orbit-dot o1"></span>
+                            <span class="orbit-dot o2"></span>
+                        </div>
 
                     <div class="home-content">
-                        <div class="badge-pill"><i class="fas fa-bolt"></i> IoT System Ready</div>
-                        <h1>HELIOS</h1>
-                        <p class="subtitle">HELMHOLTZ & IOT SYSTEM</p>
-                        <div class="divider"></div>
-                        <p class="description">
-                            Sistem kontrol presisi untuk stimulasi medan magnetik. Pantau tegangan, arus, 
-                            dan estimasi biaya secara real-time untuk optimalisasi benih.
+                        <div class="status-indicator">
+                            <div class="pulse-dot"></div>
+                            <span>SYSTEM ONLINE</span>
+                        </div>
+                        <h1 class="hero-title">HELIOS</h1>
+                        <p class="hero-subtitle">HELMHOLTZ & IOT SYSTEM</p>
+                        <div class="agri-tag" aria-label="Agricultural focus">
+                            <i class="fas fa-seedling" aria-hidden="true"></i>
+                            <span>SMART AGRI FOR RICE SEED</span>
+                        </div>
+                        <div class="tech-divider">
+                            <span class="line"></span>
+                            <i class="fas fa-microchip"></i>
+                            <span class="line"></span>
+                        </div>
+                        <p class="hero-description">
+                            Sistem kontrol presisi untuk stimulasi medan magnetik . 
+                            Dirancang khusus untuk optimalisasi pertumbuhan <strong>Benih Padi (<em>Oryza sativa L.</em>)</strong> 
+                            melalui pemantauan parameter listrik dan medan magnet secara <em>real-time</em>.
                         </p>
-                        <button class="btn-start-hero" onclick="switchPage('dashboard')">
-                            Buka Dashboard <i class="fas fa-arrow-right"></i>
+                        <button class="btn-futuristic" onclick="switchPage('dashboard')">
+                            <span class="btn-text">LAUNCH DASHBOARD</span>
+                            <i class="fas fa-arrow-right"></i>
+                            <div class="btn-glow"></div>
                         </button>
                     </div>
                 </div>
             </div>
 
             <div id="dashboard" class="page">
+                <!-- Futuristic Background for Dashboard -->
+                <div class="dashboard-bg-effect">
+                    <div class="grid-pattern"></div>
+                    <div class="glow-orb glow1"></div>
+                    <div class="glow-orb glow2"></div>
+                </div>
+                
                 <div class="header">
                     <h1><i class="fas fa-chart-line"></i> Dashboard Kontrol</h1>
                     <div class="status-badge" id="systemStatus">
-                        <div class="status-dot"></div><span id="statusText">Standby</span>
+                        <div class="status-dot"></div><span id="val_status">Standby</span><span id="statusText" style="display:none;">Standby</span>
                     </div>
                 </div>
                 
-                <div class="dashboard-grid">
+                <div class="dashboard-layout">
                     <div class="card control-panel">
                         <div class="card-header">
                             <div class="card-title"><i class="fas fa-sliders-h"></i> Panel Kontrol</div>
@@ -84,24 +204,21 @@
                         <div class="control-content-wrapper">
                             <div class="control-group">
                                 <label>Durasi Paparan (Menit)</label>
-                                <div class="control-row">
-                                    <input type="range" min="1" max="120" value="30" class="slider" id="durationSlider" oninput="updateDurationUI(this.value)">
-                                    <span id="durationValue">30 m</span>
+                                <div class="btn-options" id="durationOptions">
+                                    <button class="btn-option duration-option" data-duration="5" onclick="setActiveOption('.duration-option', this); kirimPerintah('helios/cmd/timer', '5')">5 Menit</button>
+                                    <button class="btn-option duration-option active" data-duration="10" onclick="setActiveOption('.duration-option', this); kirimPerintah('helios/cmd/timer', '10')">10 Menit</button>
+                                    <button class="btn-option duration-option" data-duration="15" onclick="setActiveOption('.duration-option', this); kirimPerintah('helios/cmd/timer', '15')">15 Menit</button>
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label>Set Target Medan (µT)</label>
-                                <select class="form-select" id="pwmSelect" onchange="updatePreset(this.value)">
-                                    <option value="100">100 µT (Low)</option>
-                                    <option value="200">200 µT (Medium)</option>
-                                    <option value="300">300 µT (High)</option>
-                                </select>
-                            </div>
-
-                            <div class="timer-box">
-                                <div class="timer-label">SISA WAKTU (MUNDUR)</div>
-                                <div class="timer-display" id="timerDisplay">00:00:00</div>
+                                <label>Set PWM (%)</label>
+                                <div class="btn-options" id="pwmOptions">
+                                    <button class="btn-option pwm-option" data-pwm="25" onclick="setActiveOption('.pwm-option', this); kirimPerintah('helios/cmd/pwm', '25')">25%</button>
+                                    <button class="btn-option pwm-option active" data-pwm="50" onclick="setActiveOption('.pwm-option', this); kirimPerintah('helios/cmd/pwm', '50')">50%</button>
+                                    <button class="btn-option pwm-option" data-pwm="75" onclick="setActiveOption('.pwm-option', this); kirimPerintah('helios/cmd/pwm', '75')">75%</button>
+                                </div>
+                                <span id="val_pwm" style="display:none;">50</span>
                             </div>
 
                             <div class="exposure-visualizer" id="waveAnim">
@@ -114,84 +231,207 @@
                         </div>
 
                         <div class="btn-group">
-                            <button class="btn btn-primary" id="btnStart" onclick="startExperiment()"><i class="fas fa-play"></i> Mulai Paparan</button>
-                            <button class="btn btn-stop" id="btnStop" onclick="stopExperiment()" disabled><i class="fas fa-stop"></i> Stop & Simpan</button>
+                            <button class="btn btn-primary" id="btnStart" onclick="kirimPerintah('helios/cmd/power', 'START'); setPowerButtons(true)"><i class="fas fa-play"></i> Mulai Paparan</button>
+                            <button class="btn btn-stop" id="btnStop" onclick="kirimPerintah('helios/cmd/power', 'STOP'); setPowerButtons(false)" disabled><i class="fas fa-stop"></i> Stop Paparan</button>
                         </div>
                     </div>
 
-                    <div class="widget-card">
-                        <div class="widget-body">
-                            <div class="widget-icon icon-blue"><i class="fas fa-bolt"></i></div>
-                            <div class="widget-details">
-                                <span class="label">ARUS LISTRIK</span>
-                                <div class="value-box text-blue"><span id="valCurrent">0.33</span> <small>A</small></div>
-                            </div>
-                        </div>
-                        <div class="progress-bg"><div class="progress-fill fill-blue" id="barCurrent" style="width:33%"></div></div>
-                    </div>
-                    
-                    <div class="widget-card">
-                        <div class="widget-body">
-                            <div class="widget-icon icon-orange"><i class="fas fa-plug"></i></div>
-                            <div class="widget-details">
-                                <span class="label">TEGANGAN</span>
-                                <div class="value-box text-orange"><span id="valVoltage">1.36</span> <small>V</small></div>
-                            </div>
-                        </div>
-                        <div class="progress-bg"><div class="progress-fill fill-orange" id="barVoltage" style="width:20%"></div></div>
-                    </div>
-                    
-                    <div class="widget-card">
-                        <div class="widget-body">
-                            <div class="widget-icon icon-purple"><i class="fas fa-clock"></i></div>
-                            <div class="widget-details">
-                                <span class="label">DURASI AKTIF</span>
-                                <div class="value-box text-purple">
-                                    <span id="valDuration">00:00</span> <small>m:s</small>
+                    <div class="widgets-grid">
+                        <div class="widget-card">
+                            <div class="widget-body">
+                                <div class="widget-icon icon-blue"><i class="fas fa-bolt"></i></div>
+                                <div class="widget-details">
+                                    <span class="label">ARUS LISTRIK</span>
+                                    <div class="value-box text-blue"><span id="val_i">0.33</span><span id="valCurrent" style="display:none;">0.33</span> <small>A</small></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="progress-bg"><div class="progress-fill fill-purple" id="barDuration" style="width:0%"></div></div>
-                    </div>
-                    
-                    <div class="widget-card">
-                        <div class="widget-body">
-                            <div class="widget-icon icon-red"><i class="fas fa-tachometer-alt"></i></div>
-                            <div class="widget-details">
-                                <span class="label">DAYA (POWER)</span>
-                                <div class="value-box text-red"><span id="valPower">0.45</span> <small>W</small></div>
+                            <div class="circular-progress">
+                                <svg class="progress-ring" viewBox="0 0 120 120">
+                                    <defs>
+                                        <linearGradient id="gradient-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+                                            <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#ddd6fe;stop-opacity:1" />
+                                        </linearGradient>
+                                        <filter id="glow-blue">
+                                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                            <feMerge>
+                                                <feMergeNode in="coloredBlur"/>
+                                                <feMergeNode in="SourceGraphic"/>
+                                            </feMerge>
+                                        </filter>
+                                    </defs>
+                                    <circle class="ring-bg" cx="60" cy="60" r="50" />
+                                    <circle class="ring-progress" cx="60" cy="60" r="50" stroke-dasharray="250, 314" filter="url(#glow-blue)" stroke="url(#gradient-blue)" />
+                                    <text x="60" y="63" class="ring-value"><tspan id="valCurrent">0.33</tspan> <tspan class="ring-unit-inline">A</tspan></text>
+                                </svg>
                             </div>
                         </div>
-                        <div class="progress-bg"><div class="progress-fill fill-red" style="width:100%"></div></div>
-                    </div>
                     
-                    <div class="widget-card">
-                        <div class="widget-body">
-                            <div class="widget-icon icon-pink"><i class="fas fa-magnet"></i></div>
-                            <div class="widget-details">
-                                <span class="label">MEDAN MAGNET</span>
-                                <div class="value-box text-pink"><span id="valField">100</span> <small>µT</small></div>
+                        <div class="widget-card">
+                            <div class="widget-body">
+                                <div class="widget-icon icon-orange"><i class="fas fa-plug"></i></div>
+                                <div class="widget-details">
+                                    <span class="label">TEGANGAN</span>
+                                    <div class="value-box text-orange"><span id="val_v">1.36</span><span id="valVoltage" style="display:none;">1.36</span> <small>V</small></div>
+                                </div>
+                            </div>
+                            <div class="circular-progress">
+                                <svg class="progress-ring" viewBox="0 0 120 120">
+                                    <defs>
+                                        <linearGradient id="gradient-orange" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#ea580c;stop-opacity:1" />
+                                            <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#fed7aa;stop-opacity:1" />
+                                        </linearGradient>
+                                        <filter id="glow-orange">
+                                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                            <feMerge>
+                                                <feMergeNode in="coloredBlur"/>
+                                                <feMergeNode in="SourceGraphic"/>
+                                            </feMerge>
+                                        </filter>
+                                    </defs>
+                                    <circle class="ring-bg" cx="60" cy="60" r="50" />
+                                    <circle class="ring-progress" cx="60" cy="60" r="50" stroke-dasharray="250, 314" filter="url(#glow-orange)" stroke="url(#gradient-orange)" />
+                                    <text x="60" y="63" class="ring-value"><tspan id="valVoltage">1.36</tspan> <tspan class="ring-unit-inline">V</tspan></text>
+                                </svg>
                             </div>
                         </div>
-                        <div class="progress-bg"><div class="progress-fill fill-pink" style="width:100%"></div></div>
-                    </div>
                     
-                    <div class="widget-card">
-                        <div class="widget-body">
-                            <div class="widget-icon icon-green"><i class="fas fa-money-bill-wave"></i></div>
-                            <div class="widget-details">
-                                <span class="label">ESTIMASI BIAYA</span>
-                                <div class="value-box text-green"><span id="valCost">0.00</span> <small>Rp</small></div>
+                        <div class="widget-card">
+                            <div class="widget-body">
+                                <div class="widget-icon icon-purple"><i class="fas fa-clock"></i></div>
+                                <div class="widget-details">
+                                    <span class="label">DURASI AKTIF</span>
+                                    <div class="value-box text-purple">
+                                        <span id="val_time">00:00</span><span id="valDuration" style="display:none;">00:00</span> <small>m:s</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="circular-progress">
+                                <svg class="progress-ring" viewBox="0 0 120 120">
+                                    <defs>
+                                        <linearGradient id="gradient-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1" />
+                                            <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#e9d5ff;stop-opacity:1" />
+                                        </linearGradient>
+                                        <filter id="glow-purple">
+                                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                            <feMerge>
+                                                <feMergeNode in="coloredBlur"/>
+                                                <feMergeNode in="SourceGraphic"/>
+                                            </feMerge>
+                                        </filter>
+                                    </defs>
+                                    <circle class="ring-bg" cx="60" cy="60" r="50" />
+                                    <circle class="ring-progress" cx="60" cy="60" r="50" stroke-dasharray="250, 314" filter="url(#glow-purple)" stroke="url(#gradient-purple)" />
+                                    <text x="60" y="63" class="ring-value"><tspan id="valDuration">00:00</tspan> <tspan class="ring-unit-inline">m:s</tspan></text>
+                                </svg>
                             </div>
                         </div>
-                        <div class="progress-bg"><div class="progress-fill fill-green" id="barCost" style="width:0%"></div></div>
+                    
+                        <div class="widget-card">
+                            <div class="widget-body">
+                                <div class="widget-icon icon-green"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="widget-details">
+                                    <span class="label">DAYA (POWER)</span>
+                                    <div class="value-box text-green"><span id="val_p">0.45</span><span id="valPower" style="display:none;">0.45</span> <small>W</small></div>
+                                </div>
+                            </div>
+                            <div class="circular-progress">
+                                <svg class="progress-ring" viewBox="0 0 120 120">
+                                    <defs>
+                                        <linearGradient id="gradient-power" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#059669;stop-opacity:1" />
+                                            <stop offset="50%" style="stop-color:#10b981;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#a7f3d0;stop-opacity:1" />
+                                        </linearGradient>
+                                        <filter id="glow-power">
+                                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                            <feMerge>
+                                                <feMergeNode in="coloredBlur"/>
+                                                <feMergeNode in="SourceGraphic"/>
+                                            </feMerge>
+                                        </filter>
+                                    </defs>
+                                    <circle class="ring-bg" cx="60" cy="60" r="50" />
+                                    <circle class="ring-progress" cx="60" cy="60" r="50" stroke-dasharray="250, 314" filter="url(#glow-power)" stroke="url(#gradient-power)" />
+                                    <text x="60" y="63" class="ring-value"><tspan id="valPower">0.45</tspan> <tspan class="ring-unit-inline">W</tspan></text>
+                                </svg>
+                            </div>
+                        </div>
+                    
+                        <div class="widget-card">
+                            <div class="widget-body">
+                                <div class="widget-icon icon-pink"><i class="fas fa-magnet"></i></div>
+                                <div class="widget-details">
+                                    <span class="label">MEDAN MAGNET</span>
+                                    <div class="value-box text-pink"><span id="val_mag">100</span><span id="valField" style="display:none;">100</span> <small>µT</small></div>
+                                </div>
+                            </div>
+                            <div class="circular-progress">
+                                <svg class="progress-ring" viewBox="0 0 120 120">
+                                    <defs>
+                                        <linearGradient id="gradient-pink" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#db2777;stop-opacity:1" />
+                                            <stop offset="50%" style="stop-color:#ec4899;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#fbcfe8;stop-opacity:1" />
+                                        </linearGradient>
+                                        <filter id="glow-pink">
+                                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                            <feMerge>
+                                                <feMergeNode in="coloredBlur"/>
+                                                <feMergeNode in="SourceGraphic"/>
+                                            </feMerge>
+                                        </filter>
+                                    </defs>
+                                    <circle class="ring-bg" cx="60" cy="60" r="50" />
+                                    <circle class="ring-progress" cx="60" cy="60" r="50" stroke-dasharray="250, 314" filter="url(#glow-pink)" stroke="url(#gradient-pink)" />
+                                    <text x="60" y="63" class="ring-value"><tspan id="valField">100</tspan> <tspan class="ring-unit-inline">µT</tspan></text>
+                                </svg>
+                            </div>
+                        </div>
+                    
+                        <div class="widget-card">
+                            <div class="widget-body">
+                                <div class="widget-icon icon-green"><i class="fas fa-money-bill-wave"></i></div>
+                                <div class="widget-details">
+                                    <span class="label">ESTIMASI BIAYA</span>
+                                    <div class="value-box text-green"><span id="val_cost">0.00</span><span id="valCost" style="display:none;">0.00</span> <small>Rp</small></div>
+                                </div>
+                            </div>
+                            <div class="circular-progress">
+                                <svg class="progress-ring" viewBox="0 0 120 120">
+                                    <defs>
+                                        <linearGradient id="gradient-green" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#059669;stop-opacity:1" />
+                                            <stop offset="50%" style="stop-color:#10b981;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#d1fae5;stop-opacity:1" />
+                                        </linearGradient>
+                                        <filter id="glow-green">
+                                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                            <feMerge>
+                                                <feMergeNode in="coloredBlur"/>
+                                                <feMergeNode in="SourceGraphic"/>
+                                            </feMerge>
+                                        </filter>
+                                    </defs>
+                                    <circle class="ring-bg" cx="60" cy="60" r="50" />
+                                    <circle class="ring-progress" cx="60" cy="60" r="50" stroke-dasharray="250, 314" filter="url(#glow-green)" stroke="url(#gradient-green)" />
+                                    <text x="60" y="63" class="ring-value"><tspan id="valCost">0.00</tspan> <tspan class="ring-unit-inline">Rp</tspan></text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
 
             <div id="history" class="page">
                 <div class="header">
-                    <h1><i class="fas fa-database"></i> Laporan Data</h1>
+                    <h1><i class="fas fa-database"></i> Laporan Data & Grafik</h1>
                     <div style="display:flex; gap:10px;">
                         <button class="btn-sm" onclick="clearHistory()"><i class="fas fa-trash"></i> Reset</button>
                         <button class="btn btn-pdf" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
@@ -206,11 +446,14 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal</th>
-                                        <th>Waktu</th>
-                                        <th>Target</th>
-                                        <th>Arus</th>
+                                        <th>PWM</th>
+                                        <th>Rata-rata Arus</th>
+                                        <th>Rata-rata Tegangan</th>
+                                        <th>Rata-rata Daya</th>
+                                        <th>Rata-rata Medan</th>
                                         <th>Durasi</th>
-                                        <th>Total Biaya</th>
+                                        <th>Biaya</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="historyBody"></tbody>
@@ -220,9 +463,480 @@
                 </div>
             </div>
 
+            <div id="specs" class="page">
+                <div class="header">
+                    <h1><i class="fas fa-microchip"></i> Spesifikasi Sistem Lengkap</h1>
+                </div>
+                
+                <div class="specs-wrapper">
+                    
+                    <!-- Visualisasi Produk -->
+                    <div class="card specs-card">
+                        <div class="specs-header">
+                            <h3><i class="fas fa-images"></i> Visualisasi Produk</h3>
+                            <p>Desain fisik dan dimensi teknis alat HELIOS</p>
+                        </div>
+                        <div class="img-gallery">
+                            <figure>
+                                <img src="helios_product_front.jpg" alt="Tampak Depan Alat HELIOS" class="product-img">
+                                <figcaption>Gambar 1: Tampak Fisik HELIOS System</figcaption>
+                            </figure>
+                            <figure>
+                                <img src="helios_dimension_draw.jpg" alt="Dimensi Teknik HELIOS" class="product-img">
+                                <figcaption>Gambar 2: Dimensi & Ukuran Coil (2D)</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <!-- Informasi Umum Sistem -->
+                    <div class="card specs-card" style="border-top-color: #3b82f6;">
+                        <div class="specs-header">
+                            <h3><i class="fas fa-info-circle"></i> Informasi Umum Sistem</h3>
+                            <p>Data teknis dan latar belakang proyek HELIOS</p>
+                        </div>
+                        <table class="specs-table">
+                            <tbody>
+                                <tr>
+                                    <td class="spec-label">Nama Sistem</td>
+                                    <td><strong>HELIOS</strong> (Helmholtz & IoT System)</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Fungsi Utama</td>
+                                    <td>Pembangkit medan magnet ELF (Extremely Low Frequency) homogen terkontrol untuk stimulasi pertumbuhan benih tanaman</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Prinsip Kerja</td>
+                                    <td>Memanfaatkan konfigurasi <strong>Kumparan Helmholtz</strong> untuk menghasilkan medan magnet uniform di area tengah kumparan</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Target Objek</td>
+                                    <td><strong>Benih Padi (<em>Oryza sativa L.</em>)</strong> [Utama] & Salak Pondoh</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Jenis Paparan</td>
+                                    <td><strong>ELF Magnetic Field</strong> (Extremely Low Frequency Magnetic Field)</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Jenis Proyek</td>
+                                    <td>Tugas Akhir - Teknik Elektro, Institut Teknologi Sumatera (ITERA)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <!-- Komponen Hardware -->
+                    <div class="card specs-card" style="border-top-color: #10b981;">
+                        <div class="specs-header">
+                            <h3><i class="fas fa-tools"></i> Komponen Hardware & Sensor</h3>
+                            <p>Spesifikasi teknis komponen penyusun utama (Bill of Materials)</p>
+                        </div>
+                        <table class="specs-table">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left; background:#f1f5f9; padding:10px;">Komponen</th>
+                                    <th style="text-align:left; background:#f1f5f9; padding:10px;">Tipe / Seri & Spesifikasi Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="spec-label"><i class="fas fa-microchip"></i> Mikrokontroler</td>
+                                    <td>
+                                        <strong>ESP32 Dev Module</strong><br>
+                                        <small>• Dual-core Xtensa LX6, 240 MHz</small><br>
+                                        <small>• Wi-Fi 802.11 b/g/n + Bluetooth 4.2 BLE</small><br>
+                                        <small>• 34 GPIO pins, ADC 12-bit, PWM</small><br>
+                                        <small>• Operating Voltage: 3.3V</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label"><i class="fas fa-bolt"></i> Sensor Arus & Tegangan</td>
+                                    <td>
+                                        <strong>INA219 Current/Power Monitor</strong><br>
+                                        <small>• Interface: I2C (Address: 0x40 - 0x4F)</small><br>
+                                        <small>• Resolusi: 12-bit ADC</small><br>
+                                        <small>• Range Arus: ±3.2A (dengan shunt 0.1Ω)</small><br>
+                                        <small>• Range Tegangan Bus: 0 - 26V</small><br>
+                                        <small>• Akurasi: ±0.5%</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label"><i class="fas fa-magnet"></i> Sensor Medan Magnet</td>
+                                    <td>
+                                        <strong>GY-273 (HMC5883L)</strong><br>
+                                        <small>• 3-Axis Digital Magnetometer</small><br>
+                                        <small>• Interface: I2C (Address: 0x1E)</small><br>
+                                        <small>• Range: 0.09 µT - 810 µT (±8 gauss)</small><br>
+                                        <small>• Resolusi: 0.73 mG/LSB</small><br>
+                                        <small>• Update Rate: 160 Hz (max)</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label"><i class="fas fa-plug"></i> Driver Aktuator</td>
+                                    <td>
+                                        <strong>MOSFET IRLZ44N</strong><br>
+                                        <small>• Type: N-Channel Enhancement Mode</small><br>
+                                        <small>• V<sub>DS</sub>: 55V | I<sub>D</sub>: 47A (continuous)</small><br>
+                                        <small>• R<sub>DS(on)</sub>: 0.022Ω (max) @ V<sub>GS</sub>=10V</small><br>
+                                        <small>• Logic-Level Gate (V<sub>GS(th)</sub>: 1-2V)</small><br>
+                                        <small>• Pendinginan: Heatsink + Thermal Paste</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label"><i class="fas fa-tv"></i> Display Interface</td>
+                                    <td>
+                                        <strong>LCD TFT 3.5" Touch Screen</strong><br>
+                                        <small>• Resolusi: 480x320 pixel</small><br>
+                                        <small>• Driver IC: ILI9486 / ILI9488</small><br>
+                                        <small>• Interface: SPI (MOSI, MISO, SCK, CS, DC)</small><br>
+                                        <small>• Touchscreen: Resistive 4-wire</small><br>
+                                        <small>• Backlight: LED (adjustable brightness)</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label"><i class="fas fa-sync-alt"></i> Aktuator (Kumparan)</td>
+                                    <td>
+                                        <strong>Kumparan Helmholtz (Coil Pair)</strong><br>
+                                        <small>• Material: Kawat Tembaga Enamel Ø 0.7mm</small><br>
+                                        <small>• Jumlah Lilitan per Coil: ±50 turns</small><br>
+                                        <small>• Radius Kumparan (R): 15 cm</small><br>
+                                        <small>• Jarak antar Coil (d): 15 cm (= R)</small><br>
+                                        <small>• Resistansi Total: ~4-5 Ω</small><br>
+                                        <small>• Frame: Kayu (non-magnetic material)</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label"><i class="fas fa-battery-full"></i> Catu Daya</td>
+                                    <td>
+                                        <strong>Power Supply DC</strong><br>
+                                        <small>• Input: AC 220V, 50Hz</small><br>
+                                        <small>• Output: DC 12V / 5A (60W)</small><br>
+                                        <small>• Proteksi: Short Circuit, Over Current, Over Voltage</small>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Parameter Operasional -->
+                    <div class="card specs-card" style="border-top-color: #8b5cf6;">
+                        <div class="specs-header">
+                            <h3><i class="fas fa-sliders-h"></i> Parameter Operasional Sistem</h3>
+                            <p>Rentang kerja dan konfigurasi sistem HELIOS</p>
+                        </div>
+                        <table class="specs-table">
+                            <tbody>
+                                <tr>
+                                    <td class="spec-label">Intensitas Medan Magnet</td>
+                                    <td><strong>Set via PWM 25%, 50%, 75%</strong> (3 Level Preset)</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Frekuensi Medan</td>
+                                    <td><strong>50 Hz</strong> (ELF - Extremely Low Frequency)</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Durasi Paparan</td>
+                                    <td><strong>5, 10, 15 menit</strong> (Preset) | Custom: 1 - 60 menit</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Range Arus Operasional</td>
+                                    <td><strong>0.3A - 1.5A</strong> (tergantung target intensitas medan)</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Tegangan Kerja Coil</td>
+                                    <td><strong>1V - 8V DC</strong> (PWM controlled)</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Konsumsi Daya</td>
+                                    <td><strong>0.3W - 12W</strong> (Real-time monitoring)</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Sampling Rate Sensor</td>
+                                    <td><strong>1 Hz</strong> (1 pembacaan/detik) untuk INA219 & HMC5883L</td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Area Medan Homogen</td>
+                                    <td><strong>Ø ~10 cm</strong> (di pusat geometris antara 2 kumparan)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <!-- Software & Firmware -->
+                    <div class="card specs-card" style="border-top-color: #14b8a6;">
+                        <div class="specs-header">
+                            <h3><i class="fas fa-code"></i> Software & Firmware</h3>
+                            <p>Platform pengembangan dan library yang digunakan</p>
+                        </div>
+                        <table class="specs-table">
+                            <tbody>
+                                <tr>
+                                    <td class="spec-label">IDE Pengembangan</td>
+                                    <td>
+                                        <strong>Arduino IDE 2.x / PlatformIO</strong><br>
+                                        <small>• ESP32 Board Manager v2.x</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Bahasa Pemrograman</td>
+                                    <td>
+                                        <strong>Firmware:</strong> C/C++ (Arduino Framework)<br>
+                                        <strong>Web:</strong> HTML5, CSS3, JavaScript (ES6+)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Library ESP32</td>
+                                    <td>
+                                        <small>• <strong>WiFi.h</strong> - Koneksi Wi-Fi</small><br>
+                                        <small>• <strong>PubSubClient.h</strong> - MQTT Client</small><br>
+                                        <small>• <strong>Wire.h</strong> - I2C Communication</small><br>
+                                        <small>• <strong>Adafruit_INA219.h</strong> - Driver sensor arus/tegangan</small><br>
+                                        <small>• <strong>Adafruit_HMC5883_U.h</strong> - Driver magnetometer</small><br>
+                                        <small>• <strong>TFT_eSPI.h</strong> - Driver LCD TFT</small><br>
+                                        <small>• <strong>ArduinoJson.h</strong> - JSON parsing</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="spec-label">Algoritma Kontrol</td>
+                                    <td>
+                                        <strong>PWM Closed-loop Control</strong><br>
+                                        <small>• Target: Mencapai intensitas medan magnet setpoint</small><br>
+                                        <small>• Feedback: Real-time data dari HMC5883L</small><br>
+                                        <small>• Aktuasi: Duty cycle PWM (0-255) ke MOSFET Gate</small>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Persamaan & Formula -->
+                    <div class="card specs-card" style="border-top-color: #f43f5e;">
+                        <div class="specs-header">
+                            <h3><i class="fas fa-calculator"></i> Formula & Perhitungan Teknis</h3>
+                            <p>Persamaan matematis yang digunakan dalam sistem</p>
+                        </div>
+                        <div class="specs-content">
+                            <div class="formula-section">
+                                <h4>1. Medan Magnet pada Kumparan Helmholtz</h4>
+                                <div class="formula-box">
+                                    <p><strong>Medan magnet di pusat kumparan:</strong></p>
+                                    <p class="math-formula">B = (8/√125) × (μ₀ × N × I) / R</p>
+                                    <p class="formula-desc">
+                                        Dimana:<br>
+                                        • B = Medan magnet (Tesla atau µT)<br>
+                                        • μ₀ = Permeabilitas ruang hampa = 4π × 10⁻⁷ T·m/A<br>
+                                        • N = Jumlah lilitan per kumparan<br>
+                                        • I = Arus listrik (Ampere)<br>
+                                        • R = Radius kumparan (meter)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="formula-section">
+                                <h4>2. Daya Listrik</h4>
+                                <div class="formula-box">
+                                    <p class="math-formula">P = V × I</p>
+                                    <p class="formula-desc">
+                                        Dimana:<br>
+                                        • P = Daya (Watt)<br>
+                                        • V = Tegangan (Volt)<br>
+                                        • I = Arus (Ampere)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="formula-section">
+                                <h4>3. Estimasi Biaya Operasional</h4>
+                                <div class="formula-box">
+                                    <p class="math-formula">Biaya = (P × t × Tarif) / 1000</p>
+                                    <p class="formula-desc">
+                                        Dimana:<br>
+                                        • P = Daya (Watt)<br>
+                                        • t = Waktu operasi (jam)<br>
+                                        • Tarif = Rp 1.444,70 per kWh (PLN Rumah Tangga 900 VA)<br>
+                                        • Hasil dalam Rupiah (Rp)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="formula-section">
+                                <h4>4. Resistansi Kumparan</h4>
+                                <div class="formula-box">
+                                    <p class="math-formula">R_coil = ρ × L / A</p>
+                                    <p class="formula-desc">
+                                        Dimana:<br>
+                                        • ρ = Resistivitas tembaga ≈ 1.68 × 10⁻⁸ Ω·m<br>
+                                        • L = Panjang kawat total (meter)<br>
+                                        • A = Luas penampang kawat (m²)<br>
+                                        • Untuk Ø 0.7mm → A ≈ 3.85 × 10⁻⁷ m²
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Keamanan & Batasan -->
+                    <div class="card specs-card" style="border-top-color: #f97316;">
+                        <div class="specs-header">
+                            <h3><i class="fas fa-shield-alt"></i> Keamanan & Batasan Sistem</h3>
+                            <p>Protokol keselamatan dan limitasi operasional</p>
+                        </div>
+                        <div class="specs-content">
+                            <div class="safety-section">
+                                <h4><i class="fas fa-exclamation-triangle"></i> Protokol Keselamatan</h4>
+                                <ul class="specs-list">
+                                    <li><strong>Proteksi Arus Lebih:</strong> Auto-shutdown jika arus melebihi 2A (software safeguard)</li>
+                                    <li><strong>Thermal Management:</strong> Heatsink pada MOSFET untuk disipasi panas</li>
+                                    <li><strong>Insulasi Elektrik:</strong> Semua koneksi listrik terisolasi dengan baik</li>
+                                    <li><strong>Material Non-Magnetik:</strong> Rangka kayu untuk menghindari distorsi medan magnet</li>
+                                    <li><strong>Timer Auto-Stop:</strong> Sistem otomatis berhenti setelah durasi preset tercapai</li>
+                                    <li><strong>Watchdog Timer:</strong> ESP32 auto-reset jika sistem freeze/hang</li>
+                                </ul>
+                            </div>
+
+                            <div class="limitations-section">
+                                <h4><i class="fas fa-info-circle"></i> Batasan & Limitasi</h4>
+                                <ul class="specs-list">
+                                    <li><strong>Area Homogen Terbatas:</strong> Medan magnet hanya homogen di area Ø ~10cm di pusat kumparan</li>
+                                    <li><strong>Interferensi Eksternal:</strong> Perlu ditempatkan jauh dari sumber medan magnet lain (speaker, motor, dll)</li>
+                                    <li><strong>Efek Thermal Drift:</strong> Resistansi coil naik seiring kenaikan suhu (kompensasi via PWM)</li>
+                                    <li><strong>Koneksi Wi-Fi:</strong> Memerlukan jaringan Wi-Fi stabil untuk monitoring real-time</li>
+                                    <li><strong>Kapasitas Sample:</strong> Ukuran wadah sample dibatasi oleh diameter area homogen (~10cm)</li>
+                                    <li><strong>Durasi Continuous:</strong> Tidak disarankan operasi lebih dari 60 menit tanpa cooling-down</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div id="about" class="page">
+                <div class="header">
+                    <h1><i class="fas fa-users"></i> Tim Pengembang</h1>
+                </div>
+
+                <div class="about-container">
+                    <div class="about-section">
+                        <div class="section-header">
+                            <i class="fas fa-user-graduate"></i>
+                            <h3>Anggota Kelompok</h3>
+                        </div>
+                        <div class="team-grid">
+                            <div class="team-card">
+                                <div class="team-avatar">
+                                    <img src="foto_zora.jpg" alt="Zora Tsaqif">
+                                </div>
+                                <div class="team-info">
+                                    <h4>Zora Tsaqif Arientyo</h4>
+                                    <span class="badge badge-member">Anggota</span>
+                                    <p class="nim">122130046</p>
+                                </div>
+                            </div>
+                            <div class="team-card">
+                                <div class="team-avatar">
+                                    <img src="foto_azki.jpg" alt="Muhammad Azki">
+                                </div>
+                                <div class="team-info">
+                                    <h4>Muhammad Azki Al Faiz</h4>
+                                    <span class="badge badge-member">Anggota</span>
+                                    <p class="nim">122130029</p>
+                                </div>
+                            </div>
+                            <div class="team-card">
+                                <div class="team-avatar">
+                                    <img src="foto_syarani.jpg" alt="Syarani Aulia">
+                                </div>
+                                <div class="team-info">
+                                    <h4>Syarani Aulia Salsabila</h4>
+                                    <span class="badge badge-member">Anggota</span>
+                                    <p class="nim">122130051</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-section">
+                        <div class="section-header">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <h3>Dosen Pembimbing</h3>
+                        </div>
+                        <div class="lecturer-grid">
+                            <div class="team-card lecturer">
+                                <div class="team-avatar">
+                                    <img src="foto_dosen_tria.jpg" alt="Ibu Tria">
+                                </div>
+                                <div class="team-info">
+                                    <h4>Tria Kasnalestari, S.T., M.T.</h4>
+                                    <span class="badge badge-advisor">Pembimbing I</span>
+                                    <p class="nim">NIP: 19920917 202203 2 012</p>
+                                </div>
+                            </div>
+                            <div class="team-card lecturer">
+                                <div class="team-avatar">
+                                    <img src="foto_dosen_syamsyarief.jpg" alt="Bapak Syamsyarief">
+                                </div>
+                                <div class="team-info">
+                                    <h4>Syamsyarief Baqaruzi, S.T., M.T.</h4>
+                                    <span class="badge badge-advisor">Pembimbing II</span>
+                                    <p class="nim">NIP: 19900907 201903 1 015</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-    
+
+    <script>
+        // --- MQTT Client Bootstrap (koneksi saja, handler utama di script.js) ---
+        const host = 'ws://broker.hivemq.com:8000/mqtt';
+        const clientId = 'Web_' + Math.random().toString(16).substring(2, 10);
+        const client = mqtt.connect(host, {
+            clientId: clientId,
+            reconnectPeriod: 2000,
+            clean: true
+        });
+
+        // Ekspor ke window agar aman dipakai lintas script tag.
+        window.client = client;
+        console.log('[MQTT] Client dibuat dari inline:', { host, clientId });
+
+        client.on('connect', function(connack) {
+            console.log('[MQTT] Inline CONNECT sukses:', connack);
+        });
+        client.on('offline', function() {
+            console.warn('[MQTT] Inline OFFLINE. Menunggu reconnect...');
+        });
+        client.on('error', function(error) {
+            console.error('[MQTT] Inline ERROR:', error);
+        });
+
+        // Helper global untuk tombol HTML onclick
+        function setActiveOption(selector, activeElement) {
+            document.querySelectorAll(selector).forEach(function(btn) { btn.classList.remove('active'); });
+            if (activeElement) activeElement.classList.add('active');
+        }
+        function setPowerButtons(running) {
+            var btnStart = document.getElementById('btnStart');
+            var btnStop = document.getElementById('btnStop');
+            if (btnStart) btnStart.disabled = Boolean(running);
+            if (btnStop) btnStop.disabled = !running;
+        }
+        function kirimPerintah(topik, pesan) {
+            var payload = String(pesan);
+            if (!client || !client.connected) {
+                console.warn('[MQTT] Publish gagal, belum terhubung:', topik, payload);
+                return;
+            }
+            client.publish(topik, payload);
+            console.log('[MQTT] Publish:', topik, payload);
+        }
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
