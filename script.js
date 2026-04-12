@@ -148,8 +148,19 @@ function switchPage(pageId) {
     updatePageScrollLock(pageId);
 
     const mainContent = document.querySelector('.main-content');
-    if (mainContent && window.matchMedia('(max-width: 1024px)').matches) {
-        mainContent.scrollTop = 0;
+    if (window.matchMedia('(max-width: 1024px)').matches) {
+        requestAnimationFrame(() => {
+            // On mobile the scroll container can be either the window (body/html)
+            // or the internal main-content, depending on overflow rules.
+            try {
+                window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+            } catch {
+                window.scrollTo(0, 0);
+            }
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            if (mainContent) mainContent.scrollTop = 0;
+        });
     }
     
     const navs = document.querySelectorAll('.nav-item');
@@ -1317,15 +1328,4 @@ function downloadPDF() {
             row.avgField || '-',
             row.duration,
             'Rp ' + row.cost
-        ];
-        tableRows.push(data);
-    });
-
-    doc.autoTable({
-        head: [tableColumn],
-        body: tableRows,
-        startY: 40,
-    });
-    
-    doc.save("Laporan_HELIOS.pdf");
-}
+ 
