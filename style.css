@@ -3784,10 +3784,10 @@ sub {
         width: 100%;
         height: auto;
         padding: 12px 14px;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
-        gap: 12px;
+        justify-content: flex-start;
+        gap: 10px;
         position: sticky;
         top: 0;
         z-index: 100;
@@ -3800,18 +3800,20 @@ sub {
     }
 
     .nav-menu {
-        flex-direction: row;
+        width: 100%;
+        flex: none;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 6px;
-        flex: 1;
-        justify-content: flex-end;
-        overflow-x: auto;
+        justify-content: stretch;
+        overflow: visible;
         padding-bottom: 2px;
-        -webkit-overflow-scrolling: touch;
     }
 
     .nav-item {
-        padding: 10px 12px;
-        white-space: nowrap;
+        padding: 10px 8px;
+        white-space: normal;
+        text-align: center;
         min-height: 44px;
     }
 
@@ -3920,18 +3922,19 @@ sub {
     }
 
     .nav-menu {
+        width: 100%;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 4px;
     }
 
     .nav-item {
-        flex: 1 0 auto;
         justify-content: center;
-        padding: 9px 10px;
+        padding: 9px 8px;
         font-size: 12px;
     }
 
     .nav-item span {
-        display: none;
+        display: inline;
     }
 
     .page,
@@ -4086,11 +4089,12 @@ sub {
     }
 
     .nav-menu {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 3px;
     }
 
     .nav-item {
-        padding: 8px 9px;
+        padding: 8px 8px;
         font-size: 11px;
         border-radius: 8px;
     }
