@@ -146,6 +146,11 @@ function switchPage(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
     updatePageScrollLock(pageId);
+
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent && window.matchMedia('(max-width: 1024px)').matches) {
+        mainContent.scrollTop = 0;
+    }
     
     const navs = document.querySelectorAll('.nav-item');
     navs.forEach(n => n.classList.remove('active'));
