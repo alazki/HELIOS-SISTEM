@@ -3793,7 +3793,8 @@ sub {
         top: 0;
         z-index: 9999;
         flex-shrink: 0;
-        background: inherit;
+        background: #0f172a;
+        color: white;
         pointer-events: auto;
     }
 
@@ -3856,6 +3857,25 @@ sub {
         gap: 4px;
         border-radius: 10px;
         pointer-events: auto;
+    }
+
+    .nav-item {
+        color: #cbd5e1;
+    }
+
+    .nav-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+    .nav-item:active {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-item.active {
+        background: #10b981;
+        color: white;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
 
     .main-content {
@@ -3960,6 +3980,24 @@ sub {
         z-index: 1;
     }
 
+    #history .history-layout {
+        flex: 0 0 auto;
+    }
+
+    #history .table-card.full-height {
+        height: auto;
+    }
+
+    #history .full-height {
+        height: auto;
+    }
+
+    #history .table-scroll-wrapper {
+        flex: 0 0 auto;
+        min-height: 0;
+        overflow-y: visible;
+    }
+
     .specs-table {
         width: 100%;
         min-width: 0;
@@ -4033,6 +4071,36 @@ sub {
         gap: 3px;
         min-height: 44px;
         border-radius: 10px;
+    }
+
+    .nav-item {
+        color: #cbd5e1;
+    }
+
+    .nav-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+    .nav-item:active {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-item.active {
+        background: #10b981;
+        color: white;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    #history .table-card.full-height,
+    #history .full-height {
+        height: auto;
+    }
+
+    #history .table-scroll-wrapper {
+        flex: 0 0 auto;
+        min-height: 0;
+        overflow-y: visible;
     }
 
     .nav-item span {
@@ -4254,6 +4322,25 @@ sub {
         min-height: 44px;
     }
 
+    .nav-item {
+        color: #cbd5e1;
+    }
+
+    .nav-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+    .nav-item:active {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-item.active {
+        background: #10b981;
+        color: white;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
     .page,
     #dashboard.page,
     #history.page,
@@ -4389,6 +4476,17 @@ sub {
 
     .custom-table th {
         z-index: 1;
+    }
+
+    #history .table-card.full-height,
+    #history .full-height {
+        height: auto;
+    }
+
+    #history .table-scroll-wrapper {
+        flex: 0 0 auto;
+        min-height: 0;
+        overflow-y: visible;
     }
 
     .specs-table {
