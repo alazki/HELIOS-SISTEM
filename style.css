@@ -3908,6 +3908,11 @@ sub {
         min-height: 0;
     }
 
+    #history.page.active {
+        display: block;
+        overflow: visible;
+    }
+
     #home.page,
     #home.page.active {
         height: auto;
