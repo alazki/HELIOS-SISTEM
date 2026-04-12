@@ -160,6 +160,14 @@ function switchPage(pageId) {
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
             if (mainContent) mainContent.scrollTop = 0;
+
+            // Extra safety: make sure History always starts at its header.
+            if (pageId === 'history') {
+                const historyHeader = document.querySelector('#history .header');
+                if (historyHeader) {
+                    historyHeader.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
+                }
+            }
         });
     }
     
@@ -1328,4 +1336,15 @@ function downloadPDF() {
             row.avgField || '-',
             row.duration,
             'Rp ' + row.cost
- 
+        ];
+        tableRows.push(data);
+    });
+
+    doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 40,
+    });
+    
+    doc.save("Laporan_HELIOS.pdf");
+}
