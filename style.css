@@ -3793,7 +3793,7 @@ sub {
         top: 0;
         z-index: 1000;
         flex-shrink: 0;
-        background: inherit;
+        background: #0f172a;
     }
 
     .logo {
@@ -3847,14 +3847,12 @@ sub {
         padding: 8px 10px;
         white-space: nowrap;
         text-align: center;
-        min-height: 40px;
+        min-height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 4px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
+        border-radius: 10px;
     }
 
     .main-content {
@@ -3878,6 +3876,28 @@ sub {
         padding: 12px;
         width: 100%;
         box-sizing: border-box;
+    }
+
+    #history.page.active,
+    #specs.page.active,
+    #about.page.active {
+        height: auto;
+        min-height: 0;
+    }
+
+    #home.page,
+    #home.page.active {
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 0;
+    }
+
+    #home .home-wrapper {
+        height: auto;
+        min-height: 100%;
+        overflow: visible;
     }
 
     .header {
@@ -3944,13 +3964,6 @@ sub {
         align-items: flex-start;
     }
 
-    .specs-card,
-    .about-section,
-    .card,
-    .widget-card,
-    .control-panel {
-        border-radius: 14px;
-    }
 }
 
 @media (max-width: 768px) {
@@ -3996,7 +4009,8 @@ sub {
         align-items: center;
         justify-content: center;
         gap: 3px;
-        min-height: 40px;
+        min-height: 44px;
+        border-radius: 10px;
     }
 
     .nav-item span {
@@ -4013,6 +4027,28 @@ sub {
         height: auto;
         overflow-x: hidden;
         overflow-y: auto;
+    }
+
+    #history.page.active,
+    #specs.page.active,
+    #about.page.active {
+        height: auto;
+        min-height: 0;
+    }
+
+    #home.page,
+    #home.page.active {
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 0;
+    }
+
+    #home .home-wrapper {
+        height: auto;
+        min-height: 100%;
+        overflow: visible;
     }
 
     .hero-title {
@@ -4179,12 +4215,12 @@ sub {
         min-width: 76px;
         padding: 7px 8px;
         font-size: 9px;
-        border-radius: 6px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 2px;
-        min-height: 38px;
+        min-height: 44px;
     }
 
     .page,
@@ -4199,6 +4235,28 @@ sub {
         overflow-y: auto;
         width: 100%;
         box-sizing: border-box;
+    }
+
+    #history.page.active,
+    #specs.page.active,
+    #about.page.active {
+        height: auto;
+        min-height: 0;
+    }
+
+    #home.page,
+    #home.page.active {
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 0;
+    }
+
+    #home .home-wrapper {
+        height: auto;
+        min-height: 100%;
+        overflow: visible;
     }
 
     .header h1 {
