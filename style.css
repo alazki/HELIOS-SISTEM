@@ -3761,3 +3761,510 @@ sub {
     margin-bottom: 12px !important;
     border: 1px solid rgba(226,232,240,0.7) !important;
 }
+
+/* ================= MOBILE-FIRST OVERRIDES ================= */
+@media (max-width: 1024px) {
+    html,
+    body {
+        width: 100%;
+        min-height: 100%;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .container {
+        width: 100%;
+        min-height: 100vh;
+        height: auto;
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 12px 14px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .logo {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+
+    .nav-menu {
+        flex-direction: row;
+        gap: 6px;
+        flex: 1;
+        justify-content: flex-end;
+        overflow-x: auto;
+        padding-bottom: 2px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-item {
+        padding: 10px 12px;
+        white-space: nowrap;
+        min-height: 44px;
+    }
+
+    .main-content {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: visible;
+    }
+
+    .page,
+    #dashboard.page,
+    #history.page,
+    #specs.page,
+    #about.page {
+        height: auto;
+        min-height: calc(100vh - 72px);
+        overflow: visible;
+    }
+
+    .header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .dashboard-layout,
+    .about-container,
+    .specs-wrapper,
+    .history-layout {
+        height: auto;
+        overflow: visible;
+    }
+
+    .dashboard-layout {
+        flex-direction: column;
+    }
+
+    .control-panel {
+        width: 100%;
+        flex: 1 1 auto;
+    }
+
+    .widgets-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+        height: auto;
+    }
+
+    .widget-card {
+        min-height: 130px;
+    }
+
+    .charts-grid,
+    .tables-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .custom-table {
+        min-width: 760px;
+    }
+
+    .table-scroll-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .about-container {
+        flex-direction: column;
+    }
+
+    .team-grid,
+    .lecturer-grid {
+        gap: 10px;
+    }
+
+    .team-card {
+        align-items: flex-start;
+    }
+
+    .specs-card,
+    .about-section,
+    .card,
+    .widget-card,
+    .control-panel {
+        border-radius: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: clamp(12px, 3.2vw, 14px);
+    }
+
+    .sidebar {
+        padding: 10px 12px;
+        gap: 8px;
+    }
+
+    .logo-text h2 {
+        font-size: 16px;
+    }
+
+    .logo-text p {
+        font-size: 9px;
+    }
+
+    .nav-menu {
+        gap: 4px;
+    }
+
+    .nav-item {
+        flex: 1 0 auto;
+        justify-content: center;
+        padding: 9px 10px;
+        font-size: 12px;
+    }
+
+    .nav-item span {
+        display: none;
+    }
+
+    .page,
+    #dashboard.page,
+    #history.page,
+    #specs.page,
+    #about.page {
+        padding: 12px;
+        min-height: calc(100vh - 64px);
+    }
+
+    .hero-title {
+        font-size: clamp(34px, 11vw, 54px);
+        letter-spacing: 2px;
+    }
+
+    .hero-subtitle {
+        font-size: 12px;
+        letter-spacing: 2px;
+    }
+
+    .hero-description {
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .btn-futuristic,
+    .btn,
+    .btn-option,
+    .step-btn,
+    .btn-view,
+    .btn-report {
+        min-height: 44px;
+    }
+
+    .dashboard-layout {
+        gap: 10px;
+    }
+
+    .control-content-wrapper {
+        gap: 10px;
+    }
+
+    .btn-options {
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .btn-option {
+        flex: 1 1 calc(50% - 6px);
+        padding: 10px 8px;
+    }
+
+    .widgets-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .widget-card {
+        min-height: 120px;
+        padding: 12px;
+    }
+
+    .value-box {
+        font-size: clamp(24px, 8vw, 34px);
+    }
+
+    .value-box small {
+        font-size: 12px;
+    }
+
+    .custom-table {
+        min-width: 680px;
+    }
+
+    .custom-table th,
+    .custom-table td {
+        padding: 10px 8px;
+        font-size: 11px;
+    }
+
+    .history-metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .charts-grid,
+    .tables-grid {
+        gap: 10px;
+    }
+
+    .specs-header {
+        padding: 14px 16px;
+    }
+
+    .specs-header h3 {
+        font-size: 14px;
+    }
+
+    .specs-header p {
+        font-size: 11px;
+        margin-left: 0;
+    }
+
+    .specs-table {
+        min-width: 620px;
+    }
+
+    .specs-table th,
+    .specs-table td {
+        padding: 10px 10px;
+    }
+
+    .spec-label {
+        width: 34%;
+    }
+
+    .about-section {
+        padding: 12px;
+    }
+
+    .section-header h3 {
+        font-size: 14px;
+    }
+
+    .team-card {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .team-avatar {
+        width: 52px;
+        height: 52px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .logo i {
+        font-size: 18px;
+    }
+
+    .logo-text h2 {
+        font-size: 14px;
+    }
+
+    .logo-text p {
+        font-size: 8px;
+    }
+
+    .nav-menu {
+        gap: 3px;
+    }
+
+    .nav-item {
+        padding: 8px 9px;
+        font-size: 11px;
+        border-radius: 8px;
+    }
+
+    .page,
+    #dashboard.page,
+    #history.page,
+    #specs.page,
+    #about.page {
+        padding: 10px;
+        min-height: calc(100vh - 58px);
+    }
+
+    .header h1 {
+        font-size: 18px;
+    }
+
+    .status-badge {
+        width: 100%;
+        justify-content: center;
+        font-size: 11px;
+        padding: 7px 12px;
+    }
+
+    .hero-title {
+        font-size: clamp(28px, 14vw, 42px);
+        letter-spacing: 1px;
+    }
+
+    .hero-subtitle {
+        font-size: 10px;
+        letter-spacing: 1.5px;
+    }
+
+    .hero-description {
+        font-size: 13px;
+    }
+
+    .btn-futuristic {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 16px;
+        font-size: 12px;
+    }
+
+    .btn-options {
+        flex-direction: column;
+    }
+
+    .btn-option {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .stepper-control {
+        grid-template-columns: 34px 1fr 34px;
+        gap: 8px;
+    }
+
+    .step-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .step-value {
+        min-height: 34px;
+        font-size: 12px;
+    }
+
+    .widgets-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .widget-card {
+        min-height: 110px;
+        padding: 10px;
+        border-radius: 12px;
+    }
+
+    .widget-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+    }
+
+    .label {
+        font-size: 9px;
+    }
+
+    .value-box {
+        font-size: clamp(22px, 10vw, 30px);
+    }
+
+    .value-box small {
+        font-size: 11px;
+    }
+
+    .custom-table,
+    .specs-table {
+        min-width: 0;
+    }
+
+    .table-scroll-wrapper {
+        border-radius: 10px;
+    }
+
+    .custom-table th,
+    .custom-table td,
+    .specs-table th,
+    .specs-table td {
+        padding: 8px 7px;
+        font-size: 10px;
+    }
+
+    .history-metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .charts-grid,
+    .tables-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .specs-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .specs-header h3 {
+        font-size: 13px;
+    }
+
+    .spec-label {
+        width: auto;
+    }
+
+    .specs-content,
+    .specs-header,
+    .about-section,
+    .card,
+    .control-panel {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .team-card {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .team-avatar {
+        width: 64px;
+        height: 64px;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .nav-item,
+    .btn,
+    .btn-option,
+    .step-btn,
+    .btn-view,
+    .btn-report,
+    .btn-futuristic {
+        min-height: 44px;
+    }
+
+    .widget-card:hover,
+    .card:hover,
+    .team-card:hover,
+    .specs-card:hover {
+        transform: none;
+        box-shadow: inherit;
+    }
+}
