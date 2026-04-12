@@ -123,6 +123,9 @@ const pointValueLabelsPlugin = {
 window.onload = init;
 
 function init() {
+    if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+    }
     loadHistory();
     currentSettings = getProfileByPwm(selectedPwm);
     resetMonitoringDisplay();
@@ -149,7 +152,7 @@ function switchPage(pageId) {
 
     const mainContent = document.querySelector('.main-content');
     if (window.matchMedia('(max-width: 1024px)').matches) {
-        requestAnimationFrame(() => {
+        const resetMobileScroll = () => {
             // On mobile the scroll container can be either the window (body/html)
             // or the internal main-content, depending on overflow rules.
             try {
@@ -157,17 +160,26 @@ function switchPage(pageId) {
             } catch {
                 window.scrollTo(0, 0);
             }
+
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
-            if (mainContent) mainContent.scrollTop = 0;
 
-            // Extra safety: make sure History always starts at its header.
+            if (mainContent) {
+                mainContent.scrollTop = 0;
+            }
+
             if (pageId === 'history') {
                 const historyHeader = document.querySelector('#history .header');
                 if (historyHeader) {
                     historyHeader.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
                 }
             }
+        };
+
+        requestAnimationFrame(() => {
+            resetMobileScroll();
+            requestAnimationFrame(resetMobileScroll);
+            setTimeout(resetMobileScroll, 50);
         });
     }
     
