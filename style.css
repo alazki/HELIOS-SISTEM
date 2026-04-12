@@ -3783,14 +3783,17 @@ sub {
     .sidebar {
         width: 100%;
         height: auto;
-        padding: 10px 12px;
+        min-height: 56px;
+        padding: 8px 12px;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
+        gap: 8px;
         position: sticky;
         top: 0;
-        z-index: 100;
+        z-index: 1000;
+        flex-shrink: 0;
+        background: inherit;
     }
 
     .logo {
@@ -3798,6 +3801,28 @@ sub {
         padding-bottom: 0;
         border-bottom: 0;
         flex: 0 0 auto;
+        gap: 8px;
+        min-width: fit-content;
+        overflow: hidden;
+    }
+
+    .logo i {
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+    }
+
+    .sidebar-footer {
+        display: none;
     }
 
     .nav-menu {
@@ -3806,21 +3831,30 @@ sub {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        gap: 6px;
+        gap: 4px;
         justify-content: flex-end;
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
-        padding-bottom: 2px;
+        padding: 0 0 2px 0;
+        margin: 0;
+        align-items: center;
     }
 
     .nav-item {
         flex: 0 0 auto;
-        min-width: 92px;
-        padding: 10px 12px;
+        min-width: 88px;
+        padding: 8px 10px;
         white-space: nowrap;
         text-align: center;
-        min-height: 44px;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
 
     .main-content {
@@ -3828,7 +3862,8 @@ sub {
         height: auto;
         min-height: 0;
         overflow-x: hidden;
-        overflow-y: visible;
+        overflow-y: auto;
+        flex: 1 1 auto;
     }
 
     .page,
@@ -3837,8 +3872,12 @@ sub {
     #specs.page,
     #about.page {
         height: auto;
-        min-height: calc(100vh - 72px);
-        overflow: visible;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 12px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .header {
@@ -3851,7 +3890,9 @@ sub {
     .specs-wrapper,
     .history-layout {
         height: auto;
+        width: 100%;
         overflow: visible;
+        overflow-x: hidden;
     }
 
     .dashboard-layout {
@@ -3919,7 +3960,8 @@ sub {
 
     .sidebar {
         padding: 8px 10px;
-        gap: 8px;
+        gap: 6px;
+        min-height: 54px;
     }
 
     .logo-text h2 {
@@ -3936,19 +3978,25 @@ sub {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        gap: 4px;
+        gap: 3px;
         justify-content: flex-end;
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
+        padding: 0 0 2px 0;
+        margin: 0;
     }
 
     .nav-item {
         flex: 0 0 auto;
-        min-width: 86px;
+        min-width: 80px;
+        padding: 8px 9px;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
         justify-content: center;
-        padding: 9px 10px;
-        font-size: 11px;
+        gap: 3px;
+        min-height: 40px;
     }
 
     .nav-item span {
@@ -3961,7 +4009,10 @@ sub {
     #specs.page,
     #about.page {
         padding: 12px;
-        min-height: calc(100vh - 64px);
+        min-height: auto;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 
     .hero-title {
@@ -4092,7 +4143,8 @@ sub {
 @media (max-width: 480px) {
     .sidebar {
         padding: 8px 10px;
-        gap: 6px;
+        gap: 5px;
+        min-height: 52px;
     }
 
     .logo i {
@@ -4113,19 +4165,26 @@ sub {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        gap: 3px;
+        gap: 2px;
         justify-content: flex-end;
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
+        padding: 0 0 2px 0;
+        margin: 0;
     }
 
     .nav-item {
         flex: 0 0 auto;
-        min-width: 80px;
-        padding: 8px 9px;
-        font-size: 10px;
-        border-radius: 8px;
+        min-width: 76px;
+        padding: 7px 8px;
+        font-size: 9px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        min-height: 38px;
     }
 
     .page,
@@ -4134,7 +4193,12 @@ sub {
     #specs.page,
     #about.page {
         padding: 10px;
-        min-height: calc(100vh - 58px);
+        min-height: auto;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .header h1 {
