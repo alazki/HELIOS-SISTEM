@@ -4567,6 +4567,31 @@ sub {
     }
 }
 
+/* Mobile fix: keep History content pinned to top (prevent it from dropping down) */
+@media (max-width: 1024px) {
+    #history.page,
+    #history.page.active {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: stretch !important;
+    }
+
+    #history .history-layout,
+    #history #reportArea {
+        margin-top: 0 !important;
+        align-self: stretch !important;
+        flex: 0 0 auto !important;
+    }
+
+    #history .table-card,
+    #history .table-card.full-height,
+    #history .full-height {
+        margin-top: 0 !important;
+        height: auto !important;
+    }
+}
+
 @media (hover: none) and (pointer: coarse) {
     .nav-item,
     .btn,
