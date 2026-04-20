@@ -4610,3 +4610,18 @@ sub {
         box-shadow: inherit;
     }
 }
+
+/* Full-bleed guard: remove any remaining white edge gap on desktop/mobile */
+html,
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100dvh;
+    background: #f1f5f9;
+}
+
+.container {
+    width: 100% !important;
+    min-height: 100dvh;
+}
