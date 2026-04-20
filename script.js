@@ -5,9 +5,7 @@ let targetSeconds = 0;
 let isRunning = false;
 let latestMonitoring = null;
 let lastRecordedMinute = -1;
-
 // Topik MQTT dikelola di inline script HTML (client)
-
 // Variabel untuk menyimpan data sementara per menit saat percobaan berjalan
 let tempLogs = {
     times: [],    // Menit ke-1, Menit ke-2, dst
