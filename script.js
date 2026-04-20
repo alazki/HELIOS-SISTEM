@@ -167,13 +167,6 @@ function switchPage(pageId) {
             if (mainContent) {
                 mainContent.scrollTop = 0;
             }
-
-            if (pageId === 'history') {
-                const historyHeader = document.querySelector('#history .header');
-                if (historyHeader) {
-                    historyHeader.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
-                }
-            }
         };
 
         requestAnimationFrame(() => {
@@ -274,7 +267,7 @@ function setActiveByDataAttr(selector, dataAttr, value) {
 }
 
 function resetMonitoringDisplay() {
-    setTextForId('val_i', '0.00');
+    setTextForId('val_i', '0.000');
     setTextForId('val_v', '0.00');
     setTextForId('val_p', '0.00');
     setTextForId('val_mag', '0.0');
@@ -282,7 +275,7 @@ function resetMonitoringDisplay() {
     setTextForId('val_time', '00:00');
     setTextForId('val_status', 'Standby');
 
-    setTextForId('valCurrent', '0.00');
+    setTextForId('valCurrent', '0.000');
     setTextForId('valVoltage', '0.00');
     setTextForId('valPower', '0.00');
     setTextForId('valField', '0.0');
@@ -292,7 +285,7 @@ function resetMonitoringDisplay() {
 
 function updateDisplayValues() {
     setTextForId('valField', currentSettings.field.toFixed(1));
-    setTextForId('valCurrent', currentSettings.current.toFixed(2));
+    setTextForId('valCurrent', currentSettings.current.toFixed(3));
     setTextForId('valVoltage', currentSettings.voltage.toFixed(2));
     
     const power = (currentSettings.current * currentSettings.voltage).toFixed(2);
@@ -327,12 +320,12 @@ function buildDemoReading() {
 }
 
 function applyLiveReadings(reading) {
-    setTextForId('val_i', reading.current.toFixed(2));
+    setTextForId('val_i', reading.current.toFixed(3));
     setTextForId('val_v', reading.voltage.toFixed(2));
     setTextForId('val_p', reading.power.toFixed(2));
     setTextForId('val_mag', reading.field.toFixed(1));
 
-    setTextForId('valCurrent', reading.current.toFixed(2));
+    setTextForId('valCurrent', reading.current.toFixed(3));
     setTextForId('valVoltage', reading.voltage.toFixed(2));
     setTextForId('valField', reading.field.toFixed(1));
     setTextForId('valPower', reading.power.toFixed(2));
