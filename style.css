@@ -3911,7 +3911,8 @@ sub {
 
     #history.page.active {
         display: block;
-        overflow: visible;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     #home.page,
@@ -4001,7 +4002,7 @@ sub {
     #history .table-scroll-wrapper {
         flex: 0 0 auto;
         min-height: 0;
-        overflow-y: visible;
+        overflow-y: auto;
     }
 
     .specs-table {
@@ -4106,7 +4107,7 @@ sub {
     #history .table-scroll-wrapper {
         flex: 0 0 auto;
         min-height: 0;
-        overflow-y: visible;
+        overflow-y: auto;
     }
 
     .nav-item span {
@@ -4363,7 +4364,8 @@ sub {
 
     #history.page.active {
         display: block;
-        overflow: visible;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     #history.page.active,
@@ -4497,7 +4499,7 @@ sub {
     #history .table-scroll-wrapper {
         flex: 0 0 auto;
         min-height: 0;
-        overflow-y: visible;
+        overflow-y: auto;
     }
 
     .specs-table {
