@@ -4569,7 +4569,6 @@ sub {
 
 /* Mobile fix: keep History content pinned to top (prevent it from dropping down) */
 @media (max-width: 1024px) {
-    #history.page,
     #history.page.active {
         display: flex !important;
         flex-direction: column !important;
