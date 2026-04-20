@@ -894,7 +894,7 @@
 
     <script>
         // --- MQTT Client Bootstrap (koneksi saja, handler utama di script.js) ---
-        const host = 'ws://broker.hivemq.com:8000/mqtt';
+        const host = 'wss://broker.hivemq.com:8884/mqtt';
         const clientId = 'Web_' + Math.random().toString(16).substring(2, 10);
         const client = mqtt.connect(host, {
             clientId: clientId,
